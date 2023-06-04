@@ -1,9 +1,9 @@
-import HomePageOut from "./pages/HomePageOut";
+import RoutesTree from "./routes/RoutesTree";
 
 function App() {
   return (
     <>
-      <HomePageOut />
+      <RoutesTree />
     </>
   );
 }
