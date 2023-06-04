@@ -1,5 +1,11 @@
+import RoutesTree from "./routes/RoutesTree";
+
 function App() {
-  return <p>Hello World hello</p>;
+  return (
+    <>
+      <RoutesTree />
+    </>
+  );
 }
 
 export default App;
