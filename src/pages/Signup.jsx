@@ -33,8 +33,13 @@ const Signup = () => {
 
   const handleCreateAccount = async (e) => {
     e.preventDefault();
-    console.log(signUpData.password, signUpData.repeatPassword);
-    if (signUpData.password !== signUpData.repeatPassword) {
+    if (
+      signUpData.password !== signUpData.repeatPassword ||
+      !signUpData.email ||
+      !signUpData.nickname ||
+      !signUpData.password ||
+      !signUpData.repeatPassword
+    ) {
       setPasswordMatch(true);
     } else {
       setPasswordMatch(false);
@@ -54,35 +59,28 @@ const Signup = () => {
           isClosable: true,
         });
       } catch (error) {
-        {
-          error &&
-            toast({
-              title: "Houston, we have a problem...",
-              description: "Wrong email or password.",
-              status: "error",
-              duration: 4000,
-              isClosable: true,
-            });
-        }
+        toast({
+          title: "Houston, we have a problem...",
+          description: "Wrong email or password.",
+          status: "error",
+          duration: 4000,
+          isClosable: true,
+        });
       }
     }
   };
 
   return (
-    <Flex justify="center" align="center" direction="column">
-      <Heading my={5} fontSize="4xl">
-        RapidTap
-      </Heading>
+    <Flex justify={"center"} align="center" direction="column" mx={4}>
       <Heading my={5} fontSize="4xl">
         Signup
       </Heading>
       <Center>
-        <Text fontSize="xs">
+        <Text fontSize="xs" textAlign="center">
           Sign up now for Speed Tapper, the game that pushes your reflexes to
           the limit.
         </Text>
       </Center>
-      <Text fontSize="xs">Tap, race, and conquer 100 levels.</Text>
       <Flex justify="center" align="center" direction="column" mt="100px">
         <Flex position="relative">
           <Flex flexDirection="column">
@@ -130,9 +128,9 @@ const Signup = () => {
           <TbArrowBadgeRight size="60px" className="arrow-badge" />
         </Flex>
         {passwordMatch && (
-          <Alert status="error">
+          <Alert status="error" textAlign="center" justify="center">
             <AlertIcon size="50px" />
-            Passwords don't match
+            Passwords don't match or data missing.
           </Alert>
         )}
         <Button
