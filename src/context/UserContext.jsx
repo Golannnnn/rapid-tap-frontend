@@ -8,7 +8,7 @@ const UserContext = createContext();
  * How to use this context in a component:
  * import { useContext } from "react";
  * import { UserContext } from "../context/UserContext";
- * const user = useContext(UserContext);
+ * const { user } = useContext(UserContext);
  * ref: https://devtrium.com/posts/how-use-react-context-pro
  */
 
