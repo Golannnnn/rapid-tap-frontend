@@ -1,4 +1,4 @@
-import HomePageOut from "./components/HomePageOut";
+import HomePageOut from "./pages/HomePageOut";
 
 function App() {
   return (
