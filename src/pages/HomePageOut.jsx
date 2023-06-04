@@ -1,8 +1,10 @@
 import { Button, Flex, Heading, Text } from "@chakra-ui/react";
 import { TbArrowBadgeRight } from "react-icons/tb";
-import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const HomePageOut = () => {
+  const navigate = useNavigate();
+
   return (
     <Flex justify="center" align="center" direction="column">
       <Flex justify={"center"} align="center" direction="column" mx={4}>
@@ -18,35 +20,55 @@ const HomePageOut = () => {
       </Flex>
       <Flex justify="center" align="center" direction="column" mt="150px">
         <Flex position="relative">
-          <NavLink to="/">
-            <Button m={3} className="glow-on-hover" w="300px">
-              Play!
-            </Button>
-          </NavLink>
+          <Button
+            m={3}
+            className="glow-on-hover"
+            w="300px"
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            Play!
+          </Button>
           <TbArrowBadgeRight size="60px" className="arrow-badge" />
         </Flex>
         <Flex position="relative">
-          <NavLink to="/login">
-            <Button m={3} className="glow-on-hover" w="300px">
-              Login
-            </Button>
-          </NavLink>
+          <Button
+            m={3}
+            className="glow-on-hover"
+            w="300px"
+            onClick={() => {
+              navigate("/login");
+            }}
+          >
+            Login
+          </Button>
           <TbArrowBadgeRight size="60px" className="arrow-badge" />
         </Flex>
         <Flex position="relative">
-          <NavLink to="/highscores">
-            <Button m={3} className="glow-on-hover" w="300px">
-              Highscores
-            </Button>
-          </NavLink>
+          <Button
+            m={3}
+            className="glow-on-hover"
+            w="300px"
+            onClick={() => {
+              navigate("/highscores");
+            }}
+          >
+            Highscores
+          </Button>
           <TbArrowBadgeRight size="60px" className="arrow-badge" />
         </Flex>
         <Flex position="relative">
-          <NavLink to="/settings">
-            <Button m={3} className="glow-on-hover" w="300px">
-              Settings
-            </Button>
-          </NavLink>
+          <Button
+            m={3}
+            className="glow-on-hover"
+            w="300px"
+            onClick={() => {
+              navigate("/settings");
+            }}
+          >
+            Settings
+          </Button>
           <TbArrowBadgeRight size="60px" className="arrow-badge" />
         </Flex>
       </Flex>
