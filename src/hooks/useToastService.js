@@ -1,5 +1,12 @@
 import { useBreakpointValue, useToast } from "@chakra-ui/react";
 
+/**
+ * How to use this hook in a component:
+ * import useToastService from "../hooks/useToastService";
+ * const { displayToast } = useToastService();
+ * displayToast("error", "message here");
+ */
+
 const useToastService = () => {
   const toast = useToast();
 
