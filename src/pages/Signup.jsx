@@ -10,12 +10,17 @@ import {
   Alert,
   AlertIcon,
   useToast,
+  AlertDescription,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { TbArrowBadgeRight } from "react-icons/tb";
 import userServices from "../services/users";
+import { NavLink } from "react-router-dom";
 
 const Signup = () => {
   const [passwordMatch, setPasswordMatch] = useState(false);
+  const [signupError, setSignupError] = useState(false);
+  const isMobile = useBreakpointValue({ base: true, md: false });
   const toast = useToast();
   const [signUpData, setSignUpData] = useState({
     email: "",
@@ -58,21 +63,16 @@ const Signup = () => {
           duration: 4000,
           isClosable: true,
         });
+        setSignupError(false);
       } catch (error) {
-        toast({
-          title: "Houston, we have a problem...",
-          description: "Wrong email or password.",
-          status: "error",
-          duration: 4000,
-          isClosable: true,
-        });
+        setSignupError(true);
       }
     }
   };
 
   return (
-    <Flex justify={"center"} align="center" direction="column" mx={4}>
-      <Heading my={5} fontSize="4xl">
+    <Flex justify={"center"} align="center" direction="column" mx={4} mb={10}>
+      <Heading my={isMobile ? 2 : 5} fontSize="4xl">
         Signup
       </Heading>
       <Center>
@@ -81,7 +81,12 @@ const Signup = () => {
           the limit.
         </Text>
       </Center>
-      <Flex justify="center" align="center" direction="column" mt="100px">
+      <Flex
+        justify="center"
+        align="center"
+        direction="column"
+        mt={isMobile ? "30px" : "100px"}
+      >
         <Flex position="relative">
           <Flex flexDirection="column">
             <Text ml={3}>Email</Text>
@@ -127,10 +132,20 @@ const Signup = () => {
           </Flex>
           <TbArrowBadgeRight size="60px" className="arrow-badge" />
         </Flex>
+        {signupError && (
+          <Alert status="error" textAlign="center" justify="center">
+            <AlertIcon size="50px" />
+            <AlertDescription fontSize={isMobile ? "15px" : "25px"}>
+              Houston, we have a problem... Change your data and try again!
+            </AlertDescription>
+          </Alert>
+        )}
         {passwordMatch && (
           <Alert status="error" textAlign="center" justify="center">
             <AlertIcon size="50px" />
-            Passwords don't match or data missing.
+            <AlertDescription fontSize={isMobile ? "15px" : "25px"}>
+              Passwords don't match or data missing.
+            </AlertDescription>
           </Alert>
         )}
         <Button
@@ -141,6 +156,12 @@ const Signup = () => {
         >
           Create account
         </Button>
+        <Text fontSize="xs" textAlign="center" mt={3}>
+          Have an account?{" "}
+          <NavLink to="/login" className="link" style={{ color: "blue" }}>
+            Login
+          </NavLink>
+        </Text>
         <TbArrowBadgeRight size="60px" className="arrow-badge" />
       </Flex>
     </Flex>
