@@ -24,8 +24,13 @@ const update = async (id, user) => {
   return response.data;
 };
 
+const getUser = async () => {
+  const response = await axios.get(`${baseUrl}/me`);
+  return response.data;
+};
+
 const logout = () => {
   localStorage.removeItem("token");
 };
 
-export default { signup, login, update, logout };
+export default { signup, login, update, getUser, logout };

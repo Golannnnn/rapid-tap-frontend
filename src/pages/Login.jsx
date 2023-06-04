@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   Button,
   Flex,
@@ -16,6 +16,7 @@ import {
 import { TbArrowBadgeRight } from "react-icons/tb";
 import userServices from "../services/users";
 import { NavLink } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
 const Login = () => {
   const [fieldError, setFieldError] = useState(false);
@@ -24,6 +25,7 @@ const Login = () => {
     name: "",
     password: "",
   });
+  const { login } = useContext(userContext);
   const toast = useToast();
   const isMobile = useBreakpointValue({ base: true, md: false });
 
@@ -43,6 +45,7 @@ const Login = () => {
         setFieldError(false);
         const response = await userServices.login(loginData);
         localStorage.setItem("token", response.token);
+        login(response.user);
         toast({
           title: "Welcome back!",
           description: "Get ready to start tapping!",
