@@ -1,5 +1,11 @@
+import HomePageOut from "./components/HomePageOut";
+
 function App() {
-  return <p>Hello World hello</p>;
+  return (
+    <>
+      <HomePageOut />
+    </>
+  );
 }
 
 export default App;
