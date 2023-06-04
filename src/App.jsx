@@ -1,13 +1,9 @@
-import HomePageOut from "./components/HomePageOut";
-import Signup from "./pages/Signup";
-import Login from "./pages/Login";
+import RoutesTree from "./routes/RoutesTree";
 
 function App() {
   return (
     <>
-      <HomePageOut />
-      <Signup />
-      <Login />
+      <RoutesTree />
     </>
   );
 }
