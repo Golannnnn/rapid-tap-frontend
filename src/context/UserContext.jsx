@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import userService from "../services/users";
+import useToastService from "../hooks/useToastService";
 
 const UserContext = createContext();
 
@@ -14,16 +15,30 @@ const UserContext = createContext();
 // eslint-disable-next-line react/prop-types
 const UserContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const { displayToast } = useToastService();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      userService
-        .getUser()
-        .then((data) => setUser(data.user))
-        .catch((err) => console.log(err));
+      getUser();
+    } else {
+      setLoading(false);
     }
   }, []);
+
+  const getUser = async () => {
+    try {
+      const response = await userService.getUser();
+      setUser(response.user);
+    } catch (err) {
+      displayToast("error", "Error getting user, please log in again");
+      userService.logout();
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const login = (user) => {
     setUser(user);
@@ -32,6 +47,7 @@ const UserContextProvider = ({ children }) => {
   const logOut = () => {
     userService.logout();
     setUser(null);
+    displayToast("info", "Logged out successfully");
   };
 
   const values = {
@@ -40,7 +56,11 @@ const UserContextProvider = ({ children }) => {
     logOut,
   };
 
-  return <UserContext.Provider value={values}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={values}>
+      {!loading && children}
+    </UserContext.Provider>
+  );
 };
 
 export { UserContext, UserContextProvider };
