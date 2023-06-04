@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Button,
   Flex,
@@ -24,30 +24,38 @@ const Login = () => {
       ...loginData,
       [e.target.name]: e.target.value,
     });
-    console.log(loginData);
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log(loginData);
-    try {
-      const response = await userServices.login(loginData);
-      localStorage.setItem("token", response.token);
+    if (!loginData.name || !loginData.password) {
       toast({
-        title: "Welcome back!",
-        description: "Get ready to start tapping!",
-        status: "success",
-        duration: 4000,
-        isClosable: true,
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Something went wrong, please try again.",
+        title: "Oh, oh!",
+        description: "Please fill in all fields.",
         status: "error",
         duration: 4000,
         isClosable: true,
       });
+    } else {
+      try {
+        const response = await userServices.login(loginData);
+        localStorage.setItem("token", response.token);
+        toast({
+          title: "Welcome back!",
+          description: "Get ready to start tapping!",
+          status: "success",
+          duration: 4000,
+          isClosable: true,
+        });
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Something went wrong, please try again.",
+          status: "error",
+          duration: 4000,
+          isClosable: true,
+        });
+      }
     }
   };
 
