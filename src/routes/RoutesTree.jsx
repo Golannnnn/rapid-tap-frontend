@@ -13,8 +13,14 @@ const RoutesTree = () => {
   return (
     <Routes>
       <Route path="/" element={<HomePageOut />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/tapmode" element={<TapMode />} />
+      <Route
+        path="/tapmode"
+        element={
+          <UserRoute>
+            <TapMode />
+          </UserRoute>
+        }
+      />
       <Route
         path="/signup"
         element={

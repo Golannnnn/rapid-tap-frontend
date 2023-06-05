@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import Circle from "./Circle";
+import { Flex, Text, Heading, Button } from "@chakra-ui/react";
 
-const Game = () => {
+const TapMode = () => {
   const [gameProgress, setGameProgress] = useState({
     round: 1,
     timer: 0,
@@ -10,46 +11,52 @@ const Game = () => {
     outerRadius: 100,
     innerRadius: 50,
   });
-  const [timeLimit, setTimeLimit] = useState(10); // Initial time limit in seconds
+  const [timeLimit, setTimeLimit] = useState(10);
   const [isGameRunning, setIsGameRunning] = useState(false);
 
   useEffect(() => {
-    // Update circle dimensions and time limit based on the round number
     const calculateDimensions = (round) => {
-      // Calculate dimensions using an algorithm of your choice
+      // outerRadius is increasing by 10 every round and starts at 100
       const outerRadius = 100 + round * 10;
-      const innerRadius = outerRadius / 2;
+      // innerRadius is decreasing by 5 every round and starts at 50
+      const innerRadius = 50 - round * 2;
       return { outerRadius, innerRadius };
     };
 
-    const calculateTimeLimit = (round) => {
-      // Calculate time limit using an algorithm of your choice
-      return 10 + round * 2; // Increase time limit by 2 seconds per round
+    const calculateTimeLimit = () => {
+      // decreases by 1 every round and starts at 10
+      return timeLimit - 1;
     };
 
     const dimensions = calculateDimensions(gameProgress.round);
-    const limit = calculateTimeLimit(gameProgress.round);
+    const limit = calculateTimeLimit();
 
     setCircleDimensions(dimensions);
     setTimeLimit(limit);
   }, [gameProgress.round]);
 
-  const startGame = () => {
-    setGameProgress((prevProgress) => ({
-      ...prevProgress,
-      timer: 0,
-    }));
-    setIsGameRunning(true);
-  };
+  useEffect(() => {
+    // if the timer reaches the time limit it stops the game else the timer continues
+    if (gameProgress.timer >= timeLimit && isGameRunning) {
+      setGameProgress((prevProgress) => ({
+        ...prevProgress,
+        round: 1,
+        timer: 0,
+      }));
+      setIsGameRunning(false);
+    } else {
+      timer();
+    }
+  }, [gameProgress.timer, timeLimit, isGameRunning]);
 
   const handleKeyPress = (event) => {
     if (isGameRunning && event.keyCode === 32) {
-      // Expand the inner circle
+      // expands the circle by 5px every time space is pressed
       setCircleDimensions((prevDimensions) => {
         const { outerRadius, innerRadius } = prevDimensions;
         const newInnerRadius = innerRadius + 5;
         if (newInnerRadius >= outerRadius) {
-          // Inner circle filled the outer circle, round completed
+          // if the innerRadius is equal to or greater than the outerRadius the game is over
           setGameProgress((prevProgress) => ({
             ...prevProgress,
             round: prevProgress.round + 1,
@@ -62,66 +69,79 @@ const Game = () => {
   };
 
   useEffect(() => {
-    document.addEventListener("keydown", handleKeyPress);
+    document.addEventListener("keyup", handleKeyPress);
     return () => {
-      document.removeEventListener("keydown", handleKeyPress);
+      document.removeEventListener("keyup", handleKeyPress);
     };
   }, [isGameRunning]);
 
-  useEffect(() => {
-    let interval;
+  const timer = () => {
+    // if the game is running the timer increases by 1 every second else the timer is reset to 0
     if (isGameRunning) {
-      interval = setInterval(() => {
+      setTimeout(() => {
         setGameProgress((prevProgress) => ({
           ...prevProgress,
           timer: prevProgress.timer + 1,
         }));
       }, 1000);
-    }
-    return () => {
-      clearInterval(interval);
-    };
-  }, [isGameRunning]);
-
-  useEffect(() => {
-    if (gameProgress.timer >= timeLimit) {
-      // Round failed, reset the game
+    } else {
       setGameProgress((prevProgress) => ({
         ...prevProgress,
-        round: 1,
         timer: 0,
       }));
-      setIsGameRunning(false);
     }
-  }, [gameProgress.timer, timeLimit]);
+  };
+
+  const startGame = () => {
+    setGameProgress((prevProgress) => ({
+      ...prevProgress,
+      timer: 0,
+    }));
+    setIsGameRunning(true);
+  };
+
+  const startNextRound = () => {
+    setGameProgress((prevProgress) => ({
+      ...prevProgress,
+      timer: 0,
+    }));
+    setIsGameRunning(true);
+  };
 
   return (
-    <div>
-      <div>Round: {gameProgress.round}</div>
-      <div>Timer: {gameProgress.timer}</div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          position: "relative",
-          marginTop: 150,
-        }}
-      >
-        <Circle
-          radius={circleDimensions.outerRadius}
-          backgroundColor="transparent"
-          borderColor="black"
-        />
-        <Circle
-          radius={circleDimensions.innerRadius}
-          backgroundColor="black"
-          borderColor="black"
-        />
-      </div>
-      {!isGameRunning && <button onClick={startGame}>Start Game</button>}
-    </div>
+    <>
+      <Flex align="center" justify="center" direction="column" mt={5}>
+        <Text>Round: {gameProgress.round}</Text>
+        <Text>Timer: {gameProgress.timer}</Text>
+        <Flex
+          align="center"
+          justify="center"
+          direction="column"
+          mt={180}
+          pos="relative"
+        >
+          <Circle
+            radius={circleDimensions.outerRadius}
+            backgroundColor="transparent"
+            borderColor="black"
+          />
+          <Circle
+            radius={circleDimensions.innerRadius}
+            backgroundColor="black"
+            borderColor="black"
+          />
+        </Flex>
+      </Flex>
+      <Flex align="center" justify="center" direction="column" mt={180}>
+        {!isGameRunning && gameProgress.round === 1 && (
+          <Button onClick={startGame}>Start Game</Button>
+        )}
+        {!isGameRunning && gameProgress.round > 1 && (
+          <Button onClick={startNextRound}>Next Round</Button>
+        )}
+      </Flex>
+    </>
   );
 };
 
-export default Game;
+export default TapMode;

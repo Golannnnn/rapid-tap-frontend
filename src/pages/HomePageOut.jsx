@@ -25,7 +25,7 @@ const HomePageOut = () => {
             className="glow-on-hover"
             w="300px"
             onClick={() => {
-              navigate("/");
+              navigate("/tapmode");
             }}
           >
             Play!
