@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Circle from "./Circle";
-import { Flex, Text, Heading, Button } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
+import GoBack from "../components/GoBack";
 
 const TapMode = () => {
   const [circleDimensions, setCircleDimensions] = useState({
@@ -132,24 +133,6 @@ const TapMode = () => {
             isGameRunning={isGameRunning}
             smallCircle={false}
           />
-          {/* <Flex
-            align="center"
-            justify="center"
-            direction="column"
-            zIndex={999}
-            position="absolute"
-          > */}
-          {/* {!isGameRunning && gameProgress.round === 1 && (
-              <Button className="game-button" onClick={startGame}>
-                Start Game
-              </Button>
-            )}
-            {!isGameRunning && gameProgress.round > 1 && (
-              <Button className="game-button" onClick={startNextRound}>
-                Next Round
-              </Button>
-            )} */}
-          {/* </Flex> */}
           <Circle
             radius={circleDimensions.innerRadius}
             backgroundColor="black"
@@ -160,6 +143,9 @@ const TapMode = () => {
             smallCircle={true}
           />
         </Flex>
+      </Flex>
+      <Flex align="center" justify="center" mt="200px">
+        <GoBack />
       </Flex>
     </>
   );
