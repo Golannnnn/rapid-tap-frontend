@@ -68,4 +68,28 @@
     visibility: visible;
     opacity: 1;
 }
+
+/* Score */
+.even-row {
+    color: black;
+}
+
+.odd-row {
+    color: black;
+}
   
+.even-row:hover {
+    background: linear-gradient(45deg, #f9fd50, #85ef47, #00bd56, #207dff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: glowing 1s ease-in-out infinite;
+}
+  
+.odd-row:hover {
+    background: linear-gradient(45deg, #f90716, #ff5403, #ffca03, #fff323);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: glowing 1s ease-in-out infinite;
+}

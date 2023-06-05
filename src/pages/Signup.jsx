@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useContext } from "react";
 import {
   Button,
   Flex,
@@ -9,19 +9,21 @@ import {
   Center,
   Alert,
   AlertIcon,
-  useToast,
   AlertDescription,
   useBreakpointValue,
 } from "@chakra-ui/react";
 import { TbArrowBadgeRight } from "react-icons/tb";
 import userServices from "../services/users";
 import { NavLink } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
+import useToastService from "../hooks/useToastService";
 
 const Signup = () => {
   const [passwordMatch, setPasswordMatch] = useState(false);
   const [signupError, setSignupError] = useState(false);
   const isMobile = useBreakpointValue({ base: true, md: false });
-  const toast = useToast();
+  const { login } = useContext(UserContext);
+  const { displayToast } = useToastService();
   const [signUpData, setSignUpData] = useState({
     email: "",
     nickname: "",
@@ -56,13 +58,8 @@ const Signup = () => {
         };
         const response = await userServices.signup(userObject);
         localStorage.setItem("token", response.token);
-        toast({
-          title: "Account created.",
-          description: "Get ready to start tapping!",
-          status: "success",
-          duration: 4000,
-          isClosable: true,
-        });
+        login(response.user);
+        displayToast("success", "Account created. Get ready to start tapping!");
         setSignupError(false);
       } catch (error) {
         setSignupError(true);
