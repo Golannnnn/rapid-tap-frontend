@@ -1,17 +1,51 @@
 /* eslint-disable react/prop-types */
+import { useEffect, useState } from "react";
+
 const Circle = ({
   radius,
   backgroundColor,
   borderColor,
   startGame,
-  startNextRound,
   isGameRunning,
-  smallCircle,
 }) => {
+  const [countDown, setCountDown] = useState(3);
+  const [canClick, setCanClick] = useState(true);
+
   const handleClick = () => {
-    if (!isGameRunning) {
-      startGame();
+    if (!isGameRunning && countDown === 3 && canClick) {
+      setCanClick(false);
+      startCountdown();
     }
+  };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const handleKeyDown = (e) => {
+    if (e.code === "Space" && !isGameRunning && countDown === 3 && canClick) {
+      setCanClick(false);
+      startCountdown();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keyup", handleKeyDown);
+    return () => {
+      document.removeEventListener("keyup", handleKeyDown);
+    };
+  }, [handleKeyDown]);
+
+  const startCountdown = () => {
+    let timerId = setInterval(() => {
+      setCountDown((prevCountDown) => prevCountDown - 1);
+    }, 1000);
+
+    setTimeout(() => {
+      clearInterval(timerId);
+      setCountDown(3);
+      setCanClick(true);
+      if (!isGameRunning) {
+        startGame();
+      }
+    }, 4000);
   };
 
   const circleStyle = {
@@ -25,12 +59,14 @@ const Circle = ({
     justifyContent: "center",
     alignItems: "center",
     color: "white",
-    cursor: !isGameRunning ? "pointer" : "default",
+    cursor: isGameRunning ? "default" : "pointer",
   };
 
   return (
     <div style={circleStyle} onClick={handleClick}>
-      {!isGameRunning && "Go!"}
+      {!isGameRunning && canClick && "Tap"}
+      {!isGameRunning && !canClick && countDown > 0 && countDown}
+      {!isGameRunning && countDown === 0 && "Go!"}
     </div>
   );
 };
