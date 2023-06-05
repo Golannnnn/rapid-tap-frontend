@@ -55,7 +55,9 @@ $bg-height: 50px;
 
 /* Main styles */
 .body {
-  height: 100%;
+  // if element is less than 100% of the viewport height, make the height 100% of the viewport height
+  min-height: 100dvh;
+
   // margin-top: 13.5rem;
 
   // color: #999;
