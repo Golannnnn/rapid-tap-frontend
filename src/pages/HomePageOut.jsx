@@ -24,7 +24,7 @@ const HomePageOut = () => {
             </Text>
           </>
         ) : (
-          <Text>What are you waiting for, {user.nickname}? Start tapping!</Text>
+          <Text align="center">What are you waiting for, {user.nickname}? Start tapping!</Text>
         )}
       </Flex>
       <Flex justify="center" align="center" direction="column" mt={user ? "50px" : "75px"}>
