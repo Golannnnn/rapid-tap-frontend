@@ -20,7 +20,7 @@ const HomePageOut = () => {
               Tap as fast as you can to fill the circle before time runs out!
             </Text>
             <Text fontSize="xs" align="center">
-              Login to save your score or play without saving!
+              Login to save your score or play without saving!!
             </Text>
           </>
         ) : (
