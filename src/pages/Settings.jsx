@@ -19,6 +19,7 @@ import { UserContext } from "../context/UserContext";
 import { AiFillCamera } from "react-icons/ai";
 import userServices from "../services/users";
 import useToastService from "../hooks/useToastService";
+import GoBack from "../components/GoBack";
 
 //TODO: CHANGE TO MOBILE
 //TODO: ADD TOASTS FOR EVERYTHING
@@ -182,6 +183,7 @@ const Settings = () => {
             </Button>
             <TbArrowBadgeRight size="60px" className="arrow-badge" />
           </Flex>
+          <GoBack />
         </Flex>
       </Flex>
     </Center>

@@ -17,6 +17,7 @@ import userServices from "../services/users";
 import { NavLink } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import useToastService from "../hooks/useToastService";
+import GoBack from "../components/GoBack";
 
 const Signup = () => {
   const [passwordMatch, setPasswordMatch] = useState(false);
@@ -74,8 +75,8 @@ const Signup = () => {
       </Heading>
       <Center>
         <Text fontSize="xs" textAlign="center">
-          Sign up now for RapidTap, the game that pushes your reflexes to
-          the limit.
+          Sign up now for RapidTap, the game that pushes your reflexes to the
+          limit.
         </Text>
       </Center>
       <Flex
@@ -87,7 +88,14 @@ const Signup = () => {
         <Flex position="relative">
           <Flex flexDirection="column">
             <Text ml={3}>Email</Text>
-            <FormControl m={3} className="glow-on-hover" bg="rgb(232, 240, 254)" color='black' borderColor='black' w="300px">
+            <FormControl
+              m={3}
+              className="glow-on-hover"
+              bg="rgb(232, 240, 254)"
+              color="black"
+              borderColor="black"
+              w="300px"
+            >
               <Input type="email" name="email" onChange={handleInputChange} />
             </FormControl>
           </Flex>
@@ -96,7 +104,14 @@ const Signup = () => {
         <Flex position="relative">
           <Flex flexDirection="column">
             <Text ml={3}>Username</Text>
-            <FormControl m={3} className="glow-on-hover" bg="rgb(232, 240, 254)" color='black' borderColor='black' w="300px">
+            <FormControl
+              m={3}
+              className="glow-on-hover"
+              bg="rgb(232, 240, 254)"
+              color="black"
+              borderColor="black"
+              w="300px"
+            >
               <Input type="text" name="nickname" onChange={handleInputChange} />
             </FormControl>
           </Flex>
@@ -105,7 +120,14 @@ const Signup = () => {
         <Flex position="relative">
           <Flex flexDirection="column">
             <Text ml={3}>Password</Text>
-            <FormControl m={3} className="glow-on-hover" bg="rgb(232, 240, 254)" color='black' borderColor='black' w="300px">
+            <FormControl
+              m={3}
+              className="glow-on-hover"
+              bg="rgb(232, 240, 254)"
+              color="black"
+              borderColor="black"
+              w="300px"
+            >
               <Input
                 type="password"
                 password="password"
@@ -119,7 +141,14 @@ const Signup = () => {
         <Flex position="relative">
           <Flex flexDirection="column">
             <Text ml={3}>Repeat Password</Text>
-            <FormControl m={3} className="glow-on-hover" bg="rgb(232, 240, 254)" color='black' borderColor='black' w="300px">
+            <FormControl
+              m={3}
+              className="glow-on-hover"
+              bg="rgb(232, 240, 254)"
+              color="black"
+              borderColor="black"
+              w="300px"
+            >
               <Input
                 type="password"
                 onChange={handleInputChange}
@@ -160,6 +189,9 @@ const Signup = () => {
           </NavLink>
         </Text>
         <TbArrowBadgeRight size="60px" className="arrow-badge" />
+      </Flex>
+      <Flex mt={5}>
+        <GoBack />
       </Flex>
     </Flex>
   );
