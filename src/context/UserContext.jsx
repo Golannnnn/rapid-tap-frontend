@@ -50,10 +50,15 @@ const UserContextProvider = ({ children }) => {
     displayToast("info", "Logged out successfully");
   };
 
+  const updateUser = (updatedUser) => {
+    setUser((prev) => ({ ...prev, ...updatedUser }));
+  };
+
   const values = {
     user,
     login,
     logOut,
+    updateUser,
   };
 
   return (

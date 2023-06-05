@@ -103,7 +103,6 @@ const Login = () => {
         {loginError && (
           <Alert status="error" textAlign="center" justify="center">
             <AlertIcon size="50px" />
-            {/* <AlertTitle>Uh, oh...</AlertTitle> */}
             <AlertDescription fontSize={isMobile ? "15px" : "25px"}>
               Uh, oh... Wrong email or password
             </AlertDescription>
