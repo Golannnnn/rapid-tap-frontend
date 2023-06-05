@@ -1,0 +1,191 @@
+import React, { useState, useContext, useRef } from "react";
+import {
+  Flex,
+  Heading,
+  Text,
+  Button,
+  FormControl,
+  Input,
+  Center,
+  Avatar,
+  AvatarBadge,
+  useBreakpointValue,
+  Alert,
+  AlertIcon,
+  AlertDescription,
+} from "@chakra-ui/react";
+import { TbArrowBadgeRight } from "react-icons/tb";
+import { UserContext } from "../context/UserContext";
+import { AiFillCamera } from "react-icons/ai";
+import userServices from "../services/users";
+import useToastService from "../hooks/useToastService";
+
+//TODO: CHANGE TO MOBILE
+//TODO: ADD TOASTS FOR EVERYTHING
+
+const Settings = () => {
+  const isMobile = useBreakpointValue({ base: true, md: false });
+  const { user, updateUser } = useContext(UserContext);
+  const [userData, setUserData] = useState({
+    nickname: "",
+    picture: "",
+  });
+  const [picture, setPicture] = useState(null);
+  const hiddenFileInput = useRef(null);
+  const { displayToast } = useToastService();
+  const [fieldError, setFieldError] = useState(false);
+  const [loginError, setLoginError] = useState(false);
+
+  const handleChange = (e) => {
+    setUserData({
+      ...userData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleImageClick = () => {
+    hiddenFileInput.current.click();
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    setPicture(file);
+  };
+
+  const saveSettings = async (e) => {
+    e.preventDefault();
+
+    const userObject = new FormData();
+    userObject.append("nickname", userData.nickname);
+    userObject.append("picture", picture);
+
+    if (
+      (!userData.nickname && !picture) ||
+      (userData.nickname === user.nickname && !picture) ||
+      (!userData.nickname && picture === null)
+    ) {
+      setFieldError(true);
+      return;
+    }
+
+    try {
+      const response = await userServices.update(user.id, userObject);
+      setFieldError(false);
+      setLoginError(false);
+      displayToast(
+        "success",
+        "Profile updated! Keep rocking and tapping! 👆🏻💥"
+      );
+      const newUpdatedUser = {
+        nickname: userData.nickname ? userData.nickname : user.nickname,
+      };
+      updateUser(newUpdatedUser);
+    } catch (error) {
+      setLoginError(true);
+    }
+  };
+
+  return (
+    <Center>
+      <Flex justify="center" align="center" direction="column">
+        <Flex justify={"center"} align="center" direction="column" mx={4}>
+          <Heading my={5} fontSize="4xl" textAlign="center">
+            Settings
+          </Heading>
+          <Text fontSize="xs" align="center">
+            Customize Your Rapid Tap Experience!
+          </Text>
+          <Text fontSize="xs" align="center" mb={5}>
+            Tapped it? Saved it? Now you can change it!
+          </Text>
+          <Avatar
+            size="xl"
+            name="nickname"
+            src={picture ? URL.createObjectURL(picture) : user.picture}
+            onClick={handleImageClick}
+            input
+            type="file"
+          >
+            <AvatarBadge
+              boxSize="0.8em"
+              borderWidth={0}
+              borderColor="blue"
+              bg="white"
+              cursor="pointer"
+              margin={2}
+            >
+              <AiFillCamera
+                style={{ objectFit: "cover", width: "70%", height: "70%" }}
+              />
+            </AvatarBadge>
+          </Avatar>
+          <input
+            type="file"
+            id="imageUpload"
+            ref={hiddenFileInput}
+            style={{ display: "none" }}
+            onChange={handleImageUpload}
+          />
+        </Flex>
+        <Flex
+          justify="center"
+          align="center"
+          direction="column"
+          mt={isMobile ? "30px" : "100px"}
+        >
+          <Flex flexDirection="column">
+            <Text ml={3}>Nickname or email</Text>
+            <FormControl m={3} className="glow-on-hover" w="300px">
+              <Input
+                type="text"
+                name="nickname"
+                defaultValue={user.nickname}
+                onChange={handleChange}
+              />
+            </FormControl>
+          </Flex>
+          {fieldError && (
+            <Alert
+              status="error"
+              textAlign="center"
+              justify="center"
+              width={isMobile && "300px"}
+            >
+              <AlertIcon size="40px" />
+              <AlertDescription fontSize={isMobile ? "10px" : "12px"}>
+                You need to change something to save your tappings! 🤔
+              </AlertDescription>
+            </Alert>
+          )}
+          {loginError && (
+            <Alert
+              status="error"
+              textAlign="center"
+              justify="center"
+              width={isMobile && "300px"}
+            >
+              <AlertIcon size="40px" />
+              <AlertDescription fontSize={isMobile ? "10px" : "12px"}>
+                Profile update stuck in Rapid Tap chaos! Keep calm and try
+                tapping again! ⚡️💥
+              </AlertDescription>
+            </Alert>
+          )}
+          <Flex position="relative">
+            <Button
+              m={3}
+              className="glow-on-hover"
+              w="300px"
+              onClick={saveSettings}
+            >
+              Save
+            </Button>
+            <TbArrowBadgeRight size="60px" className="arrow-badge" />
+          </Flex>
+        </Flex>
+      </Flex>
+    </Center>
+  );
+};
+
+export default Settings;

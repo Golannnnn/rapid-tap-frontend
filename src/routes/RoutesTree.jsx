@@ -5,6 +5,7 @@ import Login from "../pages/Login";
 import HighScorePage from "../pages/HighScorePage";
 import UserRoute from "./UserRoute";
 import GuestRoute from "./GuestRoute";
+import Settings from "../pages/Settings";
 
 // Routes that are for users need to be wrapped in UserRoute
 
@@ -34,6 +35,14 @@ const RoutesTree = () => {
           <GuestRoute>
             <Login />
           </GuestRoute>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <UserRoute>
+            <Settings />
+          </UserRoute>
         }
       />
     </Routes>

@@ -1,5 +1,5 @@
 import { Flex, Text, Button } from "@chakra-ui/react";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { UserContext } from "../context/UserContext";
 import { NavLink } from "react-router-dom";
 
