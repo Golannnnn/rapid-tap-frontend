@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Circle from "./Circle";
 import { Flex, Text, Heading, Button } from "@chakra-ui/react";
+import GoBack from "../components/GoBack";
 
 const TapMode = () => {
   const [gameProgress, setGameProgress] = useState({
@@ -140,6 +141,7 @@ const TapMode = () => {
           <Button onClick={startNextRound}>Next Round</Button>
         )}
       </Flex>
+      <GoBack />
     </>
   );
 };

@@ -17,6 +17,7 @@ import userServices from "../services/users";
 import { NavLink } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import useToastService from "../hooks/useToastService";
+import GoBack from "../components/GoBack";
 
 const Login = () => {
   const [fieldError, setFieldError] = useState(false);
@@ -117,6 +118,7 @@ const Login = () => {
             Sign up
           </NavLink>
         </Text>
+        <GoBack />
         <TbArrowBadgeRight size="40px" className="arrow-badge" />
       </Flex>
     </Flex>

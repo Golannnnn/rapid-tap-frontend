@@ -17,6 +17,7 @@ import userServices from "../services/users";
 import { NavLink } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import useToastService from "../hooks/useToastService";
+import GoBack from "../components/GoBack";
 
 const Signup = () => {
   const [passwordMatch, setPasswordMatch] = useState(false);
@@ -159,6 +160,7 @@ const Signup = () => {
             Login
           </NavLink>
         </Text>
+        <GoBack />
         <TbArrowBadgeRight size="60px" className="arrow-badge" />
       </Flex>
     </Flex>
