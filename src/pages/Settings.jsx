@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from "react";
+import { useState, useContext, useRef } from "react";
 import {
   Flex,
   Heading,
@@ -90,17 +90,21 @@ const Settings = () => {
     <Center>
       <Flex justify="center" align="center" direction="column">
         <Flex justify={"center"} align="center" direction="column" mx={4}>
-          <Heading my={5} fontSize="4xl" textAlign="center">
+          <Heading
+            my={5}
+            fontSize={isMobile ? "2xl" : "3xl"}
+            textAlign="center"
+          >
             Settings
           </Heading>
           <Text fontSize="xs" align="center">
             Customize Your Rapid Tap Experience!
           </Text>
-          <Text fontSize="xs" align="center" mb={5}>
+          <Text fontSize="xs" align="center" mb={isMobile ? 5 : 10}>
             Tapped it? Saved it? Now you can change it!
           </Text>
           <Avatar
-            size="xl"
+            size={isMobile ? "xl" : "2xl"}
             name="nickname"
             src={picture ? URL.createObjectURL(picture) : user.picture}
             onClick={handleImageClick}
@@ -113,7 +117,7 @@ const Settings = () => {
               borderColor="blue"
               bg="white"
               cursor="pointer"
-              margin={2}
+              m={2}
             >
               <AiFillCamera
                 style={{ objectFit: "cover", width: "70%", height: "70%" }}
@@ -132,7 +136,7 @@ const Settings = () => {
           justify="center"
           align="center"
           direction="column"
-          mt={isMobile ? "30px" : "100px"}
+          mt={isMobile ? "30px" : "50px"}
         >
           <Flex flexDirection="column">
             <Text ml={3}>Nickname or email</Text>
@@ -140,6 +144,8 @@ const Settings = () => {
               <Input
                 type="text"
                 name="nickname"
+                bg="rgb(232, 240, 254)"
+                color="black"
                 defaultValue={user.nickname}
                 onChange={handleChange}
               />
