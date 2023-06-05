@@ -1,16 +1,16 @@
 import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import scoreServices from "../services/scores.js";
-import "../Index.css"; // Import your CSS file
+import "../Index.css";
 
 const ScoreTableItems = () => {
   const [scores, setScores] = useState([]);
-  const [prevScore, setPrevScore] = useState([])
 
   useEffect(() => {
     const fetchScores = async () => {
       try {
         const scoresData = await scoreServices.getAllScores();
+        scoresData.sort((a, b) => b.score - a.score);
         setScores(scoresData);
       } catch (error) {
         console.error("Error fetching scores:", error);
