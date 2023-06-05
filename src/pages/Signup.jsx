@@ -74,7 +74,7 @@ const Signup = () => {
       </Heading>
       <Center>
         <Text fontSize="xs" textAlign="center">
-          Sign up now for Speed Tapper, the game that pushes your reflexes to
+          Sign up now for RapidTap, the game that pushes your reflexes to
           the limit.
         </Text>
       </Center>
@@ -82,12 +82,12 @@ const Signup = () => {
         justify="center"
         align="center"
         direction="column"
-        mt={isMobile ? "30px" : "100px"}
+        mt={isMobile ? "30px" : "50px"}
       >
         <Flex position="relative">
           <Flex flexDirection="column">
             <Text ml={3}>Email</Text>
-            <FormControl m={3} className="glow-on-hover" w="300px">
+            <FormControl m={3} className="glow-on-hover" bg="rgb(232, 240, 254)" borderColor='black' w="300px">
               <Input type="email" name="email" onChange={handleInputChange} />
             </FormControl>
           </Flex>
@@ -95,8 +95,8 @@ const Signup = () => {
         </Flex>
         <Flex position="relative">
           <Flex flexDirection="column">
-            <Text ml={3}>Nickname</Text>
-            <FormControl m={3} className="glow-on-hover" w="300px">
+            <Text ml={3}>Username</Text>
+            <FormControl m={3} className="glow-on-hover" bg="rgb(232, 240, 254)" borderColor='black' w="300px">
               <Input type="text" name="nickname" onChange={handleInputChange} />
             </FormControl>
           </Flex>
@@ -105,7 +105,7 @@ const Signup = () => {
         <Flex position="relative">
           <Flex flexDirection="column">
             <Text ml={3}>Password</Text>
-            <FormControl m={3} className="glow-on-hover" w="300px">
+            <FormControl m={3} className="glow-on-hover" bg="rgb(232, 240, 254)" borderColor='black' w="300px">
               <Input
                 type="password"
                 password="password"
@@ -119,7 +119,7 @@ const Signup = () => {
         <Flex position="relative">
           <Flex flexDirection="column">
             <Text ml={3}>Repeat Password</Text>
-            <FormControl m={3} className="glow-on-hover" w="300px">
+            <FormControl m={3} className="glow-on-hover" bg="rgb(232, 240, 254)" borderColor='black' w="300px">
               <Input
                 type="password"
                 onChange={handleInputChange}
