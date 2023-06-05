@@ -4,12 +4,12 @@ import Navbar from "./components/Navbar";
 
 function App() {
   return (
-    <>
+    <div className="body">
       <UserContextProvider>
         <Navbar />
         <RoutesTree />
       </UserContextProvider>
-    </>
+    </div>
   );
 }
 
