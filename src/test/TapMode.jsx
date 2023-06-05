@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Circle from "./Circle";
 import { Flex, Text } from "@chakra-ui/react";
 import GoBack from "../components/GoBack";
+import GameOver from "../components/GameOver";
 
 const TapMode = () => {
   const [circleDimensions, setCircleDimensions] = useState({
@@ -14,6 +15,8 @@ const TapMode = () => {
     timer: timeLimit,
   });
   const [isGameRunning, setIsGameRunning] = useState(false);
+  const [isGameOver , setIsGameOver] = useState(false)
+  console.log(isGameOver)
 
   useEffect(() => {
     const calculateDimensions = (round) => {
@@ -44,6 +47,7 @@ const TapMode = () => {
         timer: timeLimit,
       });
       setIsGameRunning(false);
+      setIsGameOver(true)
       setCircleDimensions({
         outerRadius: 100,
         innerRadius: 50,
@@ -102,6 +106,7 @@ const TapMode = () => {
       timer: timeLimit,
     }));
     setIsGameRunning(true);
+    setIsGameOver(false)
   };
 
   const startNextRound = () => {
@@ -146,6 +151,7 @@ const TapMode = () => {
       </Flex>
       <Flex align="center" justify="center" mt="200px">
         <GoBack />
+        {isGameOver && <GameOver />}
       </Flex>
     </>
   );
