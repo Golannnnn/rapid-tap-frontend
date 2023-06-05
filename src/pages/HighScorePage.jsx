@@ -3,18 +3,21 @@ import { Flex, Heading, Text, Button } from "@chakra-ui/react";
 import ScoreTableItems from '../components/ScoreTableItems';
 import scoreServices from "../services/scores.js";
 import { NavLink } from 'react-router-dom';
+import { useContext } from 'react';
+import { UserContext } from '../context/UserContext';
 
 const HighScorePage = () => {
-  const [ prevScore , setPrevScore ] = useState([])
-  const [ bestScore , setBestScore ] = useState([])
+  const [ prevScore , setPrevScore ] = useState(null)
+  const [ bestScore , setBestScore ] = useState(null)
+  const { user } = useContext(UserContext)
 
   useEffect(() => {
     const fetchScores = async () => {
       try{
-        const prevScoreData = await scoreServices.getLastScore();
-        setPrevScore(prevScoreData)
-        const bestScoreData = await scoreServices.getBestScore();
-        setBestScore(bestScoreData)
+        const prevScoreData = await scoreServices.getLastScore(user.id);
+        setPrevScore(prevScoreData[0].score)
+        const bestScoreData = await scoreServices.getBestScore(user.id);
+        setBestScore(bestScoreData[0].score)
       }catch(error){
         console.error("Error fetching scores:", error);
       }
@@ -30,8 +33,8 @@ const HighScorePage = () => {
         <Text align='center'>Where do you rank among the best?</Text>
       </Flex>
       <Flex direction='column' mt={4} mb={6} border='8px dotted black' p={4}>
-        <Text align='center'>Previous Score: {prevScore}</Text>
-        <Text align='center'>Highest Score: {bestScore}</Text>
+        <Text align='center'>Previous Score: {prevScore ? prevScore : '--'}</Text>
+        <Text align='center'>Highest Score: {bestScore ? bestScore : '--'}</Text>
       </Flex>
       <Flex direction='column'>
         <ScoreTableItems/>
