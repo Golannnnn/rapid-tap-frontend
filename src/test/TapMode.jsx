@@ -3,15 +3,15 @@ import Circle from "./Circle";
 import { Flex, Text, Heading, Button } from "@chakra-ui/react";
 
 const TapMode = () => {
-  const [gameProgress, setGameProgress] = useState({
-    round: 1,
-    timer: 0,
-  });
   const [circleDimensions, setCircleDimensions] = useState({
     outerRadius: 100,
     innerRadius: 50,
   });
   const [timeLimit, setTimeLimit] = useState(10);
+  const [gameProgress, setGameProgress] = useState({
+    round: 1,
+    timer: timeLimit,
+  });
   const [isGameRunning, setIsGameRunning] = useState(false);
 
   useEffect(() => {
@@ -37,13 +37,16 @@ const TapMode = () => {
 
   useEffect(() => {
     // if the timer reaches the time limit it stops the game else the timer continues
-    if (gameProgress.timer >= timeLimit && isGameRunning) {
-      setGameProgress((prevProgress) => ({
-        ...prevProgress,
+    if (gameProgress.timer <= 0 && isGameRunning) {
+      setGameProgress({
         round: 1,
-        timer: 0,
-      }));
+        timer: timeLimit,
+      });
       setIsGameRunning(false);
+      setCircleDimensions({
+        outerRadius: 100,
+        innerRadius: 50,
+      });
     } else {
       timer();
     }
@@ -59,7 +62,7 @@ const TapMode = () => {
           // if the innerRadius is equal to or greater than the outerRadius the game is over
           setGameProgress((prevProgress) => ({
             ...prevProgress,
-            round: prevProgress.round + 1,
+            round: gameProgress.round + 1,
           }));
           setIsGameRunning(false);
         }
@@ -81,13 +84,13 @@ const TapMode = () => {
       setTimeout(() => {
         setGameProgress((prevProgress) => ({
           ...prevProgress,
-          timer: prevProgress.timer + 1,
+          timer: prevProgress.timer - 1,
         }));
       }, 1000);
     } else {
       setGameProgress((prevProgress) => ({
         ...prevProgress,
-        timer: 0,
+        timer: timeLimit,
       }));
     }
   };
@@ -95,7 +98,7 @@ const TapMode = () => {
   const startGame = () => {
     setGameProgress((prevProgress) => ({
       ...prevProgress,
-      timer: 0,
+      timer: timeLimit,
     }));
     setIsGameRunning(true);
   };
@@ -103,7 +106,7 @@ const TapMode = () => {
   const startNextRound = () => {
     setGameProgress((prevProgress) => ({
       ...prevProgress,
-      timer: 0,
+      timer: timeLimit,
     }));
     setIsGameRunning(true);
   };
@@ -124,21 +127,39 @@ const TapMode = () => {
             radius={circleDimensions.outerRadius}
             backgroundColor="transparent"
             borderColor="black"
+            startGame={startGame}
+            startNextRound={startNextRound}
+            isGameRunning={isGameRunning}
+            smallCircle={false}
           />
+          {/* <Flex
+            align="center"
+            justify="center"
+            direction="column"
+            zIndex={999}
+            position="absolute"
+          > */}
+          {/* {!isGameRunning && gameProgress.round === 1 && (
+              <Button className="game-button" onClick={startGame}>
+                Start Game
+              </Button>
+            )}
+            {!isGameRunning && gameProgress.round > 1 && (
+              <Button className="game-button" onClick={startNextRound}>
+                Next Round
+              </Button>
+            )} */}
+          {/* </Flex> */}
           <Circle
             radius={circleDimensions.innerRadius}
             backgroundColor="black"
             borderColor="black"
+            startGame={startGame}
+            startNextRound={startNextRound}
+            isGameRunning={isGameRunning}
+            smallCircle={true}
           />
         </Flex>
-      </Flex>
-      <Flex align="center" justify="center" direction="column" mt={180}>
-        {!isGameRunning && gameProgress.round === 1 && (
-          <Button onClick={startGame}>Start Game</Button>
-        )}
-        {!isGameRunning && gameProgress.round > 1 && (
-          <Button onClick={startNextRound}>Next Round</Button>
-        )}
       </Flex>
     </>
   );
