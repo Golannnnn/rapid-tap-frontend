@@ -20,7 +20,7 @@ const HomePageOut = () => {
               Tap as fast as you can to fill the circle before time runs out!
             </Text>
             <Text fontSize="xs" align="center">
-              Login to save your score or play without saving!!
+              Login to save your score or play without saving!
             </Text>
           </>
         ) : (
@@ -31,8 +31,9 @@ const HomePageOut = () => {
         <Flex position="relative">
           <Button m={3} className="glow-on-hover" w="300px"
             onClick={() => {
-              navigate("/");
-            }}>
+              navigate("/tapmode");
+            }}
+          >
             Play!
           </Button>
           <TbArrowBadgeRight size="60px" className="arrow-badge" />
