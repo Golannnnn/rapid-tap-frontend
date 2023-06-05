@@ -25,7 +25,7 @@ const TapMode = () => {
 
     const calculateTimeLimit = () => {
       // decreases by 1 every round and starts at 10
-      return timeLimit - 1;
+      return 11 - gameProgress.round;
     };
 
     const dimensions = calculateDimensions(gameProgress.round);
