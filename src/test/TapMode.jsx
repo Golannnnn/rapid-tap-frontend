@@ -1,53 +1,147 @@
 import { useState, useEffect } from "react";
-import { Center } from "@chakra-ui/react";
+import Circle from "./Circle";
+import { Flex, Text, Heading, Button } from "@chakra-ui/react";
 
-const Game = () => {
-  const [dimensions, setDimensions] = useState({ width: 100, height: 100 });
+const TapMode = () => {
+  const [gameProgress, setGameProgress] = useState({
+    round: 1,
+    timer: 0,
+  });
+  const [circleDimensions, setCircleDimensions] = useState({
+    outerRadius: 100,
+    innerRadius: 50,
+  });
+  const [timeLimit, setTimeLimit] = useState(10);
+  const [isGameRunning, setIsGameRunning] = useState(false);
 
-  const handleKeyDown = (event) => {
-    if (dimensions.width === 400 && dimensions.height === 400) {
-      alert("You win!");
-      return;
-    }
-    if (event.code === "Space") {
-      setDimensions((prevDimensions) => ({
-        width: prevDimensions.width + 10,
-        height: prevDimensions.height + 10,
+  useEffect(() => {
+    const calculateDimensions = (round) => {
+      // outerRadius is increasing by 10 every round and starts at 100
+      const outerRadius = 100 + round * 10;
+      // innerRadius is decreasing by 5 every round and starts at 50
+      const innerRadius = 50 - round * 2;
+      return { outerRadius, innerRadius };
+    };
+
+    const calculateTimeLimit = () => {
+      // decreases by 1 every round and starts at 10
+      return 11 - gameProgress.round;
+    };
+
+    const dimensions = calculateDimensions(gameProgress.round);
+    const limit = calculateTimeLimit();
+
+    setCircleDimensions(dimensions);
+    setTimeLimit(limit);
+  }, [gameProgress.round]);
+
+  useEffect(() => {
+    // if the timer reaches the time limit it stops the game else the timer continues
+    if (gameProgress.timer >= timeLimit && isGameRunning) {
+      setGameProgress((prevProgress) => ({
+        ...prevProgress,
+        round: 1,
+        timer: 0,
       }));
+      setIsGameRunning(false);
+    } else {
+      timer();
+    }
+  }, [gameProgress.timer, timeLimit, isGameRunning]);
+
+  const handleKeyPress = (event) => {
+    if (isGameRunning && event.keyCode === 32) {
+      // expands the circle by 5px every time space is pressed
+      setCircleDimensions((prevDimensions) => {
+        const { outerRadius, innerRadius } = prevDimensions;
+        const newInnerRadius = innerRadius + 5;
+        if (newInnerRadius >= outerRadius) {
+          // if the innerRadius is equal to or greater than the outerRadius the game is over
+          setGameProgress((prevProgress) => ({
+            ...prevProgress,
+            round: prevProgress.round + 1,
+          }));
+          setIsGameRunning(false);
+        }
+        return { ...prevDimensions, innerRadius: newInnerRadius };
+      });
     }
   };
 
   useEffect(() => {
-    document.addEventListener("keyup", handleKeyDown);
+    document.addEventListener("keyup", handleKeyPress);
     return () => {
-      document.removeEventListener("keyup", handleKeyDown);
+      document.removeEventListener("keyup", handleKeyPress);
     };
-  }, [dimensions]);
+  }, [isGameRunning]);
+
+  const timer = () => {
+    // if the game is running the timer increases by 1 every second else the timer is reset to 0
+    if (isGameRunning) {
+      setTimeout(() => {
+        setGameProgress((prevProgress) => ({
+          ...prevProgress,
+          timer: prevProgress.timer + 1,
+        }));
+      }, 1000);
+    } else {
+      setGameProgress((prevProgress) => ({
+        ...prevProgress,
+        timer: 0,
+      }));
+    }
+  };
+
+  const startGame = () => {
+    setGameProgress((prevProgress) => ({
+      ...prevProgress,
+      timer: 0,
+    }));
+    setIsGameRunning(true);
+  };
+
+  const startNextRound = () => {
+    setGameProgress((prevProgress) => ({
+      ...prevProgress,
+      timer: 0,
+    }));
+    setIsGameRunning(true);
+  };
 
   return (
-    <Center mt={200}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          width: "400px",
-          height: "400px",
-          border: "1px solid black",
-          borderRadius: "50%",
-        }}
-      >
-        <div
-          style={{
-            width: dimensions.width,
-            height: dimensions.height,
-            backgroundColor: "red",
-            borderRadius: "50%",
-          }}
-        ></div>
-      </div>
-    </Center>
+    <>
+      <Flex align="center" justify="center" direction="column" mt={5}>
+        <Text>Round: {gameProgress.round}</Text>
+        <Text>Timer: {gameProgress.timer}</Text>
+        <Flex
+          align="center"
+          justify="center"
+          direction="column"
+          mt={180}
+          pos="relative"
+        >
+          <Circle
+            radius={circleDimensions.outerRadius}
+            backgroundColor="transparent"
+            borderColor="black"
+          />
+          <Circle
+            radius={circleDimensions.innerRadius}
+            backgroundColor="black"
+            borderColor="black"
+          />
+        </Flex>
+      </Flex>
+      <Flex align="center" justify="center" direction="column" mt={180}>
+        {!isGameRunning && gameProgress.round === 1 && (
+          <Button onClick={startGame}>Start Game</Button>
+        )}
+        {!isGameRunning && gameProgress.round > 1 && (
+          <Button onClick={startNextRound}>Next Round</Button>
+        )}
+      </Flex>
+    </>
   );
 };
 
-export default Game;
+export default TapMode;
