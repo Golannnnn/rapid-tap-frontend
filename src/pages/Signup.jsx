@@ -87,7 +87,7 @@ const Signup = () => {
         <Flex position="relative">
           <Flex flexDirection="column">
             <Text ml={3}>Email</Text>
-            <FormControl m={3} className="glow-on-hover" bg="rgb(232, 240, 254)" borderColor='black' w="300px">
+            <FormControl m={3} className="glow-on-hover" bg="rgb(232, 240, 254)" color='black' borderColor='black' w="300px">
               <Input type="email" name="email" onChange={handleInputChange} />
             </FormControl>
           </Flex>
@@ -96,7 +96,7 @@ const Signup = () => {
         <Flex position="relative">
           <Flex flexDirection="column">
             <Text ml={3}>Username</Text>
-            <FormControl m={3} className="glow-on-hover" bg="rgb(232, 240, 254)" borderColor='black' w="300px">
+            <FormControl m={3} className="glow-on-hover" bg="rgb(232, 240, 254)" color='black' borderColor='black' w="300px">
               <Input type="text" name="nickname" onChange={handleInputChange} />
             </FormControl>
           </Flex>
@@ -105,7 +105,7 @@ const Signup = () => {
         <Flex position="relative">
           <Flex flexDirection="column">
             <Text ml={3}>Password</Text>
-            <FormControl m={3} className="glow-on-hover" bg="rgb(232, 240, 254)" borderColor='black' w="300px">
+            <FormControl m={3} className="glow-on-hover" bg="rgb(232, 240, 254)" color='black' borderColor='black' w="300px">
               <Input
                 type="password"
                 password="password"
@@ -119,7 +119,7 @@ const Signup = () => {
         <Flex position="relative">
           <Flex flexDirection="column">
             <Text ml={3}>Repeat Password</Text>
-            <FormControl m={3} className="glow-on-hover" bg="rgb(232, 240, 254)" borderColor='black' w="300px">
+            <FormControl m={3} className="glow-on-hover" bg="rgb(232, 240, 254)" color='black' borderColor='black' w="300px">
               <Input
                 type="password"
                 onChange={handleInputChange}

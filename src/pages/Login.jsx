@@ -72,7 +72,7 @@ const Login = () => {
         <Flex position="relative">
           <Flex flexDirection="column">
             <Text ml={3}>Username or email</Text>
-            <FormControl m={3} className="glow-on-hover" w="300px" bg="rgb(232, 240, 254)" borderColor='black'>
+            <FormControl m={3} className="glow-on-hover" w="300px" bg="rgb(232, 240, 254)" color='black' borderColor='black'>
               <Input type="text" name="name" onChange={handleInputChange} />
             </FormControl>
           </Flex>
@@ -81,7 +81,7 @@ const Login = () => {
         <Flex position="relative">
           <Flex flexDirection="column">
             <Text ml={3}>Password</Text>
-            <FormControl m={3} className="glow-on-hover" w="300px" bg="rgb(232, 240, 254)" borderColor='black'>
+            <FormControl m={3} className="glow-on-hover" w="300px" bg="rgb(232, 240, 254)" color='black' borderColor='black'>
               <Input
                 type="password"
                 password="password"
