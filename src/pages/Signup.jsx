@@ -31,6 +31,7 @@ const Signup = () => {
     password: "",
     repeatPassword: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {
     setSignUpData({
@@ -50,6 +51,7 @@ const Signup = () => {
     ) {
       setPasswordMatch(true);
     } else {
+      setLoading(true);
       setPasswordMatch(false);
       try {
         const userObject = {
@@ -64,6 +66,8 @@ const Signup = () => {
         setSignupError(false);
       } catch (error) {
         setSignupError(true);
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -159,17 +163,29 @@ const Signup = () => {
           <TbArrowBadgeRight size="60px" className="arrow-badge" />
         </Flex>
         {signupError && (
-          <Alert status="error" textAlign="center" justify="center">
+          <Alert
+            status="error"
+            textAlign="center"
+            justify="center"
+            p={5}
+            my={5}
+          >
             <AlertIcon size="50px" />
-            <AlertDescription fontSize={isMobile ? "15px" : "25px"}>
+            <AlertDescription fontSize={isMobile ? "15px" : "20px"}>
               Houston, we have a problem... Change your data and try again!
             </AlertDescription>
           </Alert>
         )}
         {passwordMatch && (
-          <Alert status="error" textAlign="center" justify="center">
+          <Alert
+            status="error"
+            textAlign="center"
+            justify="center"
+            p={5}
+            my={5}
+          >
             <AlertIcon size="50px" />
-            <AlertDescription fontSize={isMobile ? "15px" : "25px"}>
+            <AlertDescription fontSize={isMobile ? "15px" : "20px"}>
               Passwords don't match or data missing.
             </AlertDescription>
           </Alert>
@@ -179,6 +195,7 @@ const Signup = () => {
           className="glow-on-hover"
           w="300px"
           onClick={handleCreateAccount}
+          isLoading={loading}
         >
           Create account
         </Button>
