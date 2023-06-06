@@ -8,6 +8,7 @@ import UserRoute from "./UserRoute";
 import GuestRoute from "./GuestRoute";
 import Settings from "../pages/Settings";
 import ClickMode from "../game/ClickMode";
+import MobileDesktop from "../components/MobileDesktop";
 
 // Routes that are for users need to be wrapped in UserRoute
 
@@ -15,6 +16,14 @@ const RoutesTree = () => {
   return (
     <Routes>
       <Route path="/" element={<HomePageOut />} />
+      <Route
+        path="/platform"
+        element={
+          <UserRoute>
+            <MobileDesktop />
+          </UserRoute>
+        }
+      />
       <Route
         path="/clickmode"
         element={
