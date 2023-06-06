@@ -1,19 +1,5 @@
 import { useState, useContext, useRef } from "react";
-import {
-  Flex,
-  Heading,
-  Text,
-  Button,
-  FormControl,
-  Input,
-  Center,
-  Avatar,
-  AvatarBadge,
-  useBreakpointValue,
-  Alert,
-  AlertIcon,
-  AlertDescription,
-} from "@chakra-ui/react";
+import { Flex, Heading, Text, Button, FormControl, Input, Center, Avatar, AvatarBadge, useBreakpointValue, Alert, AlertIcon, AlertDescription,} from "@chakra-ui/react";
 import { TbArrowBadgeRight } from "react-icons/tb";
 import { UserContext } from "../context/UserContext";
 import { AiFillCamera } from "react-icons/ai";
@@ -102,7 +88,7 @@ const Settings = () => {
             Settings
           </Heading>
           <Text fontSize="xs" align="center">
-            Customize Your Rapid Tap Experience!
+            Customize Your RapidTap Experience!
           </Text>
           <Text fontSize="xs" align="center" mb={isMobile ? 5 : 10}>
             Tapped it? Saved it? Now you can change it!
@@ -143,7 +129,7 @@ const Settings = () => {
           mt={isMobile ? "30px" : "50px"}
         >
           <Flex flexDirection="column">
-            <Text ml={3}>Nickname or email</Text>
+            <Text ml={3}>Username or email</Text>
             <FormControl m={3} className="glow-on-hover" w="300px">
               <Input
                 type="text"
