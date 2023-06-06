@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Flex, Heading, Text, Button } from "@chakra-ui/react";
 import ScoreTableItems from "../components/ScoreTableItems";
 import scoreServices from "../services/scores.js";
 import { NavLink } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
-import GoBack from "../components/GoBack";
 
 const HighScorePage = () => {
   const [prevScore, setPrevScore] = useState(null);
@@ -36,10 +35,10 @@ const HighScorePage = () => {
       </Flex>
       <Flex direction="column" mt={4} mb={6} border="8px dotted black" p={4}>
         <Text align="center">
-          Previous Score: {prevScore ? prevScore : "--"}
+          Previous round: {prevScore ? prevScore : "--"}
         </Text>
         <Text align="center">
-          Highest Score: {bestScore ? bestScore : "--"}
+          Highest round: {bestScore ? bestScore : "--"}
         </Text>
       </Flex>
       <Flex direction="column">
@@ -50,7 +49,6 @@ const HighScorePage = () => {
               Main Menu
             </Button>
           </NavLink>
-          <GoBack />
         </Flex>
       </Flex>
     </Flex>

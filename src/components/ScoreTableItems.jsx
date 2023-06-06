@@ -26,17 +26,22 @@ const ScoreTableItems = () => {
         <Tr>
           <Th> </Th>
           <Th>Username</Th>
-          <Th>Level Reached</Th>
-          <Th>Total Taps</Th>
+          <Th>Round Reached</Th>
+          <Th textAlign="center">Date</Th>
         </Tr>
       </Thead>
       <Tbody>
         {scores.slice(0, 10).map((score, index) => (
-          <Tr key={score.id} className={index % 2 === 0 ? "even-row" : "odd-row"}>
+          <Tr
+            key={score.id}
+            className={index % 2 === 0 ? "even-row" : "odd-row"}
+          >
             <Td textAlign="center">{index + 1}</Td>
             <Td textAlign="center">{score.user.nickname}</Td>
             <Td textAlign="center">{score.score}</Td>
-            <Td textAlign='center'>Update</Td>
+            <Td textAlign="center">
+              {new Date(score.createdAt).toLocaleDateString("en-UK")}
+            </Td>
           </Tr>
         ))}
       </Tbody>
