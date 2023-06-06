@@ -1,7 +1,6 @@
 import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import scoreServices from "../services/scores.js";
-import "../Index.css";
 
 const ScoreTableItems = () => {
   const [scores, setScores] = useState([]);

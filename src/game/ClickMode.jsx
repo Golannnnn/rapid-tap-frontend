@@ -8,17 +8,18 @@ import { UserContext } from "../context/UserContext";
 import scoreService from "../services/scores";
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import levels from "./levels";
 
 const TapMode = () => {
   const [circleDimensions, setCircleDimensions] = useState({
     outerRadius: 100,
     innerRadius: 50,
   });
-  const [timeLimit, setTimeLimit] = useState(10);
   const [gameProgress, setGameProgress] = useState({
     round: 1,
-    timer: timeLimit,
+    timer: levels[0].timelimit,
   });
+  const [timeLimit, setTimeLimit] = useState(levels[0].timelimit);
   const [isGameRunning, setIsGameRunning] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
   const [isSpacebarPressed, setIsSpacebarPressed] = useState(false);
@@ -27,17 +28,17 @@ const TapMode = () => {
   const { user } = useContext(UserContext);
 
   useEffect(() => {
-    const calculateDimensions = (round) => {
+    const calculateDimensions = () => {
       // outerRadius is increasing by 10 every round and starts at 100
-      const outerRadius = 100 + round * 10;
+      const outerRadius = 100;
       // innerRadius is decreasing by 5 every round and starts at 50
-      const innerRadius = 50 - round * 2;
+      const innerRadius = 50;
       return { outerRadius, innerRadius };
     };
 
     const calculateTimeLimit = () => {
       // decreases by 1 every round and starts at 10
-      return 11 - gameProgress.round;
+      return levels[gameProgress.round - 1].timelimit;
     };
 
     const dimensions = calculateDimensions(gameProgress.round);
@@ -75,7 +76,8 @@ const TapMode = () => {
         setIsSpacebarPressed(true);
         setCircleDimensions((prevDimensions) => {
           const { outerRadius, innerRadius } = prevDimensions;
-          const newInnerRadius = innerRadius + 5;
+          const newInnerRadius =
+            innerRadius + levels[gameProgress.round - 1].sizeincrease;
           if (newInnerRadius >= outerRadius) {
             setGameProgress((prevProgress) => ({
               ...prevProgress,
@@ -139,8 +141,7 @@ const TapMode = () => {
     const newScore = {
       score: gameProgress.round,
     };
-    const response = await scoreService.addScore(user.id, newScore);
-    console.log(response);
+    await scoreService.addScore(user.id, newScore);
   };
 
   const resetGame = () => {
