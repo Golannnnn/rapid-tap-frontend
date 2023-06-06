@@ -176,12 +176,14 @@ const TapMode = () => {
               />
             </>
           )}
+          {isGameOver && <GameOver />}
         </Flex>
       </Flex>
-      <Flex align="center" justify="center" mt="200px">
-        <GoBack />
-        {isGameOver && <GameOver />}
-      </Flex>
+      {!isGameRunning && (
+        <Flex align="center" justify="center" mt="200px">
+          <GoBack />
+        </Flex>
+      )}
       {!isGameRunning &&
         !isGameOver &&
         gameProgress.round > 1 &&
