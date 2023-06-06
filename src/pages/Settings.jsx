@@ -1,5 +1,19 @@
 import { useState, useContext, useRef } from "react";
-import { Flex, Heading, Text, Button, FormControl, Input, Center, Avatar, AvatarBadge, useBreakpointValue, Alert, AlertIcon, AlertDescription,} from "@chakra-ui/react";
+import {
+  Flex,
+  Heading,
+  Text,
+  Button,
+  FormControl,
+  Input,
+  Center,
+  Avatar,
+  AvatarBadge,
+  useBreakpointValue,
+  Alert,
+  AlertIcon,
+  AlertDescription,
+} from "@chakra-ui/react";
 import { TbArrowBadgeRight } from "react-icons/tb";
 import { UserContext } from "../context/UserContext";
 import { AiFillCamera } from "react-icons/ai";
@@ -180,7 +194,9 @@ const Settings = () => {
             >
               Save
             </Button>
-            <TbArrowBadgeRight size="60px" className="arrow-badge" />
+            {!isMobile && (
+              <TbArrowBadgeRight size="60px" className="arrow-badge" />
+            )}
           </Flex>
           <GoBack />
         </Flex>

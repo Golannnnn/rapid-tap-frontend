@@ -171,7 +171,7 @@ const TapMode = () => {
           !isGameOver &&
           gameProgress.round > 1 &&
           !nextRound ? (
-            <>
+            <Flex align="center" justify="center" direction="column" mt={180}>
               <Button onClick={startNextRound} colorScheme="blue">
                 Start Round {gameProgress.round}
               </Button>
@@ -180,7 +180,7 @@ const TapMode = () => {
                   Main Menu
                 </Button>
               </NavLink>
-            </>
+            </Flex>
           ) : (
             <>
               {!isGameOver && (
