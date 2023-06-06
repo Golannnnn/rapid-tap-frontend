@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Circle from "./Circle";
+import ClickCircle from "./ClickCircle";
 import { Flex, Text, Button } from "@chakra-ui/react";
 import GoBack from "../components/GoBack";
 import GameOver from "../components/GameOver";
@@ -64,32 +64,38 @@ const TapMode = () => {
   }, [gameProgress.timer, timeLimit, isGameRunning]);
 
   const handleKeyPress = (event) => {
-    if (isGameRunning && event.code === "Space" && !isSpacebarPressed) {
-      setIsSpacebarPressed(true);
-      // expands the circle by 5px every time space is pressed
-      setCircleDimensions((prevDimensions) => {
-        const { outerRadius, innerRadius } = prevDimensions;
-        const newInnerRadius = innerRadius + 5;
-        if (newInnerRadius >= outerRadius) {
-          // if the innerRadius is equal to or greater than the outerRadius the game is over
-          setGameProgress((prevProgress) => ({
-            ...prevProgress,
-            round: gameProgress.round + 1,
-          }));
-          setIsGameRunning(false);
-          setNextRound(false);
-          saveScore();
-        }
-        return { ...prevDimensions, innerRadius: newInnerRadius };
-      });
+    if (isGameRunning && !isSpacebarPressed) {
+      const { outerRadius, innerRadius } = circleDimensions;
+      const { target } = event;
+      if (
+        target.classList.contains("circle") &&
+        target.offsetWidth / 2 >= innerRadius &&
+        target.offsetWidth / 2 <= outerRadius
+      ) {
+        setIsSpacebarPressed(true);
+        setCircleDimensions((prevDimensions) => {
+          const { outerRadius, innerRadius } = prevDimensions;
+          const newInnerRadius = innerRadius + 5;
+          if (newInnerRadius >= outerRadius) {
+            setGameProgress((prevProgress) => ({
+              ...prevProgress,
+              round: gameProgress.round + 1,
+            }));
+            setIsGameRunning(false);
+            setNextRound(false);
+            saveScore();
+          }
+          return { ...prevDimensions, innerRadius: newInnerRadius };
+        });
+      }
     }
   };
 
   useEffect(() => {
-    document.addEventListener("keyup", handleKeyPress);
+    document.addEventListener("click", handleKeyPress);
 
     return () => {
-      document.removeEventListener("keyup", handleKeyPress);
+      document.removeEventListener("click", handleKeyPress);
     };
   }, [isGameRunning]);
 
@@ -158,7 +164,7 @@ const TapMode = () => {
             </Button>
           ) : (
             <>
-              <Circle
+              <ClickCircle
                 radius={circleDimensions.outerRadius}
                 backgroundColor="transparent"
                 borderColor="black"
@@ -166,7 +172,7 @@ const TapMode = () => {
                 isGameRunning={isGameRunning}
                 smallCircle={false}
               />
-              <Circle
+              <ClickCircle
                 radius={circleDimensions.innerRadius}
                 backgroundColor="black"
                 borderColor="black"
