@@ -9,6 +9,7 @@ import { UserContext } from "../context/UserContext";
 import scoreService from "../services/scores";
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import levels from "./levels";
 
 const TapMode = () => {
   const [circleDimensions, setCircleDimensions] = useState({
@@ -26,13 +27,14 @@ const TapMode = () => {
   const { width, height } = useWindowSize();
   const [nextRound, setNextRound] = useState(false);
   const { user } = useContext(UserContext);
+  console.log(levels[gameProgress.round - 1].round);
 
   useEffect(() => {
     const calculateDimensions = (round) => {
       // outerRadius is increasing by 10 every round and starts at 100
-      const outerRadius = 100 + round * 10;
+      const outerRadius = 100;
       // innerRadius is decreasing by 5 every round and starts at 50
-      const innerRadius = 50 - round * 2;
+      const innerRadius = 50;
       return { outerRadius, innerRadius };
     };
 
@@ -70,7 +72,8 @@ const TapMode = () => {
       // expands the circle by 5px every time space is pressed
       setCircleDimensions((prevDimensions) => {
         const { outerRadius, innerRadius } = prevDimensions;
-        const newInnerRadius = innerRadius + 5;
+        const newInnerRadius =
+          innerRadius + levels[gameProgress.round - 1].sizeincrease;
         if (newInnerRadius >= outerRadius) {
           // if the innerRadius is equal to or greater than the outerRadius the game is over
           setGameProgress((prevProgress) => ({
@@ -153,14 +156,23 @@ const TapMode = () => {
             <Text>Timer: {gameProgress.timer}</Text>
           </>
         )}
-        <Flex align="center" justify="center" direction="column" mt={180} pos="relative">
-          {!isGameRunning && !isGameOver && gameProgress.round > 1 && !nextRound ? (
+        <Flex
+          align="center"
+          justify="center"
+          direction="column"
+          mt={180}
+          pos="relative"
+        >
+          {!isGameRunning &&
+          !isGameOver &&
+          gameProgress.round > 1 &&
+          !nextRound ? (
             <>
               <Button onClick={startNextRound} colorScheme="blue">
                 Start Round {gameProgress.round}
               </Button>
               <NavLink to="/">
-                <Button m={3} className="glow-on-hover" w={'192px'}>
+                <Button m={3} className="glow-on-hover" w={"192px"}>
                   Main Menu
                 </Button>
               </NavLink>
@@ -191,7 +203,7 @@ const TapMode = () => {
           )}
           {isGameOver && (
             <>
-              <GameOver/>
+              <GameOver />
               <Button m={3} className="glow-on-hover" onClick={resetGame}>
                 Play Again
               </Button>
@@ -201,7 +213,7 @@ const TapMode = () => {
                 </Button>
               </NavLink>
               <NavLink to="/">
-                <Button m={3} className="glow-on-hover" w={'192px'}>
+                <Button m={3} className="glow-on-hover" w={"192px"}>
                   Main Menu
                 </Button>
               </NavLink>
@@ -209,9 +221,10 @@ const TapMode = () => {
           )}
         </Flex>
       </Flex>
-      {!isGameRunning && !isGameOver && gameProgress.round > 1 && !nextRound && (
-        <Confetti width={width} height={height} />
-      )}
+      {!isGameRunning &&
+        !isGameOver &&
+        gameProgress.round > 1 &&
+        !nextRound && <Confetti width={width} height={height} />}
     </>
   );
 };
