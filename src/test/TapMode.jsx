@@ -8,6 +8,7 @@ import Confetti from "react-confetti";
 import { UserContext } from "../context/UserContext";
 import scoreService from "../services/scores";
 import { useContext } from "react";
+import { NavLink } from "react-router-dom";
 
 const TapMode = () => {
   const [circleDimensions, setCircleDimensions] = useState({
@@ -136,58 +137,81 @@ const TapMode = () => {
     const response = await scoreService.addScore(user.id, newScore);
     console.log(response);
   };
+  const resetGame = () => {
+    setGameProgress({ round: 1, timer: timeLimit });
+    setIsGameRunning(false);
+    setIsGameOver(false);
+    setCircleDimensions({ outerRadius: 100, innerRadius: 50 });
+  };
 
   return (
     <>
       <Flex align="center" justify="center" direction="column" mt={5}>
-        <Text>Round: {gameProgress.round}</Text>
-        <Text>Timer: {gameProgress.timer}</Text>
-        <Flex
-          align="center"
-          justify="center"
-          direction="column"
-          mt={180}
-          pos="relative"
-        >
-          {!isGameRunning &&
-          !isGameOver &&
-          gameProgress.round > 1 &&
-          !nextRound ? (
-            <Button onClick={startNextRound} colorScheme="blue">
-              Start Round {gameProgress.round}
-            </Button>
+        {!isGameOver && (
+          <>
+            <Text>Round: {gameProgress.round}</Text>
+            <Text>Timer: {gameProgress.timer}</Text>
+          </>
+        )}
+        <Flex align="center" justify="center" direction="column" mt={180} pos="relative">
+          {!isGameRunning && !isGameOver && gameProgress.round > 1 && !nextRound ? (
+            <>
+              <Button onClick={startNextRound} colorScheme="blue">
+                Start Round {gameProgress.round}
+              </Button>
+              <NavLink to="/">
+                <Button m={3} className="glow-on-hover" w={'192px'}>
+                  Main Menu
+                </Button>
+              </NavLink>
+            </>
           ) : (
             <>
-              <Circle
-                radius={circleDimensions.outerRadius}
-                backgroundColor="transparent"
-                borderColor="black"
-                startGame={startGame}
-                isGameRunning={isGameRunning}
-                smallCircle={false}
-              />
-              <Circle
-                radius={circleDimensions.innerRadius}
-                backgroundColor="black"
-                borderColor="black"
-                startGame={startGame}
-                isGameRunning={isGameRunning}
-                smallCircle={true}
-              />
+              {!isGameOver && (
+                <>
+                  <Circle
+                    radius={circleDimensions.outerRadius}
+                    backgroundColor="transparent"
+                    borderColor="black"
+                    startGame={startGame}
+                    isGameRunning={isGameRunning}
+                    smallCircle={false}
+                  />
+                  <Circle
+                    radius={circleDimensions.innerRadius}
+                    backgroundColor="black"
+                    borderColor="black"
+                    startGame={startGame}
+                    isGameRunning={isGameRunning}
+                    smallCircle={true}
+                  />
+                </>
+              )}
             </>
           )}
-          {isGameOver && <GameOver />}
+          {isGameOver && (
+            <>
+              <GameOver/>
+              <Button m={3} className="glow-on-hover" onClick={resetGame}>
+                Play Again
+              </Button>
+              <NavLink to="/highscores">
+                <Button m={3} className="glow-on-hover">
+                  Highscores
+                </Button>
+              </NavLink>
+              <NavLink to="/">
+                <Button m={3} className="glow-on-hover" w={'192px'}>
+                  Main Menu
+                </Button>
+              </NavLink>
+            </>
+          )}
         </Flex>
       </Flex>
-      {!isGameRunning && (
-        <Flex align="center" justify="center" mt="200px">
-          <GoBack />
-        </Flex>
+      {!isGameRunning && !isGameOver && gameProgress.round > 1 && !nextRound && (
+        <Confetti width={width} height={height} />
       )}
-      {!isGameRunning &&
-        !isGameOver &&
-        gameProgress.round > 1 &&
-        !nextRound && <Confetti width={width} height={height} />}
     </>
   );
 };
