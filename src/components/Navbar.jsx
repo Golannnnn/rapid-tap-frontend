@@ -9,6 +9,7 @@ import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import { NavLink } from "react-router-dom";
 import logo from "../Images/logo.png";
+import BackgroundMusic from "./BackgroundMusic";
 
 const Navbar = () => {
   const { user, logOut } = useContext(UserContext);
@@ -34,17 +35,20 @@ const Navbar = () => {
           {user ? `Welcome ${user.nickname}` : "Welcome Guest"}
         </Text>
       </Flex>
-      {user ? (
-        <Button size={isMobile ? "sm" : "md"} px={5} py={5} onClick={logOut}>
-          Logout
-        </Button>
-      ) : (
-        <NavLink to="/login">
-          <Button size={isMobile ? "sm" : "md"} px={5} py={5}>
-            Login
+      <Flex align="center" justify="center" gap={5}>
+        <BackgroundMusic />
+        {user ? (
+          <Button size={isMobile ? "sm" : "md"} px={5} py={5} onClick={logOut}>
+            Logout
           </Button>
-        </NavLink>
-      )}
+        ) : (
+          <NavLink to="/login">
+            <Button size={isMobile ? "sm" : "md"} px={5} py={5}>
+              Login
+            </Button>
+          </NavLink>
+        )}
+      </Flex>
     </Flex>
   );
 };
