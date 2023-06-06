@@ -10,6 +10,7 @@ import { UserContext } from "../context/UserContext";
 import { NavLink } from "react-router-dom";
 import logo from "../Images/logo.png";
 import BackgroundMusic from "./BackgroundMusic";
+import Sounds from "./Sounds";
 
 const Navbar = () => {
   const { user, logOut } = useContext(UserContext);
@@ -36,6 +37,7 @@ const Navbar = () => {
         </Text>
       </Flex>
       <Flex align="center" justify="center" gap={5}>
+        <Sounds />
         <BackgroundMusic />
         {user ? (
           <Button size={isMobile ? "sm" : "md"} px={5} py={5} onClick={logOut}>

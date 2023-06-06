@@ -8,6 +8,9 @@ import { UserContext } from "../context/UserContext";
 import scoreService from "../services/scores";
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import click from "../assets/click.mp3";
+import success from "../assets/success.mp3";
+import fail from "../assets/fail.mp3";
 
 const TapMode = () => {
   const [circleDimensions, setCircleDimensions] = useState({
@@ -47,6 +50,11 @@ const TapMode = () => {
     setTimeLimit(limit);
   }, [gameProgress.round]);
 
+  const failSound = () => {
+    const audio = new Audio(fail);
+    audio.play();
+  };
+
   useEffect(() => {
     // if the timer reaches the time limit it stops the game else the timer continues
     if (gameProgress.timer <= 0 && isGameRunning) {
@@ -56,6 +64,7 @@ const TapMode = () => {
       });
       setIsGameRunning(false);
       setIsGameOver(true);
+      failSound();
       setCircleDimensions({
         outerRadius: 100,
         innerRadius: 50,
@@ -63,19 +72,33 @@ const TapMode = () => {
     }
   }, [gameProgress.timer, timeLimit, isGameRunning]);
 
+  const playClickSound = () => {
+    const audio = new Audio(click);
+    audio.play();
+  };
+
+  const playSuccessSound = () => {
+    const audio = new Audio(success);
+    audio.play();
+  };
+
   const handleKeyPress = (event) => {
     if (isGameRunning && event.code === "Space" && !isSpacebarPressed) {
       setIsSpacebarPressed(true);
+      playClickSound();
       // expands the circle by 5px every time space is pressed
       setCircleDimensions((prevDimensions) => {
         const { outerRadius, innerRadius } = prevDimensions;
         const newInnerRadius = innerRadius + 5;
         if (newInnerRadius >= outerRadius) {
           // if the innerRadius is equal to or greater than the outerRadius the game is over
-          setGameProgress((prevProgress) => ({
-            ...prevProgress,
-            round: gameProgress.round + 1,
-          }));
+          setGameProgress(
+            (prevProgress) => ({
+              ...prevProgress,
+              round: gameProgress.round + 1,
+            }),
+            playSuccessSound()
+          );
           setIsGameRunning(false);
           setNextRound(false);
           saveScore();
