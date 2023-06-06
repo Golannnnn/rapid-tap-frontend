@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import Circle from "./Circle";
 import { Flex, Text, Button } from "@chakra-ui/react";
-import GoBack from "../components/GoBack";
 import GameOver from "../components/GameOver";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
@@ -137,6 +136,7 @@ const TapMode = () => {
     const response = await scoreService.addScore(user.id, newScore);
     console.log(response);
   };
+
   const resetGame = () => {
     setGameProgress({ round: 1, timer: timeLimit });
     setIsGameRunning(false);
@@ -153,14 +153,23 @@ const TapMode = () => {
             <Text>Timer: {gameProgress.timer}</Text>
           </>
         )}
-        <Flex align="center" justify="center" direction="column" mt={180} pos="relative">
-          {!isGameRunning && !isGameOver && gameProgress.round > 1 && !nextRound ? (
+        <Flex
+          align="center"
+          justify="center"
+          direction="column"
+          mt={180}
+          pos="relative"
+        >
+          {!isGameRunning &&
+          !isGameOver &&
+          gameProgress.round > 1 &&
+          !nextRound ? (
             <>
               <Button onClick={startNextRound} colorScheme="blue">
                 Start Round {gameProgress.round}
               </Button>
               <NavLink to="/">
-                <Button m={3} className="glow-on-hover" w={'192px'}>
+                <Button m={3} className="glow-on-hover" w={"192px"}>
                   Main Menu
                 </Button>
               </NavLink>
@@ -191,7 +200,7 @@ const TapMode = () => {
           )}
           {isGameOver && (
             <>
-              <GameOver/>
+              <GameOver />
               <Button m={3} className="glow-on-hover" onClick={resetGame}>
                 Play Again
               </Button>
@@ -201,7 +210,7 @@ const TapMode = () => {
                 </Button>
               </NavLink>
               <NavLink to="/">
-                <Button m={3} className="glow-on-hover" w={'192px'}>
+                <Button m={3} className="glow-on-hover" w={"192px"}>
                   Main Menu
                 </Button>
               </NavLink>
@@ -209,9 +218,10 @@ const TapMode = () => {
           )}
         </Flex>
       </Flex>
-      {!isGameRunning && !isGameOver && gameProgress.round > 1 && !nextRound && (
-        <Confetti width={width} height={height} />
-      )}
+      {!isGameRunning &&
+        !isGameOver &&
+        gameProgress.round > 1 &&
+        !nextRound && <Confetti width={width} height={height} />}
     </>
   );
 };
