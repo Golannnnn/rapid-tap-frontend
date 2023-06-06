@@ -23,7 +23,13 @@ const Navbar = () => {
       py={1}
     >
       <Flex align="center">
-        <Image src={logo} alt="RapidTap" boxSize={isMobile ? "60px" : "75px"} />
+        <NavLink to="/">
+          <Image
+            src={logo}
+            alt="RapidTap"
+            boxSize={isMobile ? "60px" : "75px"}
+          />
+        </NavLink>
         <Text ml={2} fontSize={isMobile ? "sm" : "lg"}>
           {user ? `Welcome ${user.nickname}` : "Welcome Guest"}
         </Text>
