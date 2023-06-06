@@ -36,6 +36,7 @@ const Settings = () => {
   const { displayToast } = useToastService();
   const [fieldError, setFieldError] = useState(false);
   const [loginError, setLoginError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setUserData({
@@ -69,6 +70,7 @@ const Settings = () => {
       return;
     }
 
+    setLoading(true);
     try {
       const response = await userServices.update(user.id, userObject);
       setFieldError(false);
@@ -83,6 +85,8 @@ const Settings = () => {
       updateUser(newUpdatedUser);
     } catch (error) {
       setLoginError(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -157,6 +161,7 @@ const Settings = () => {
               textAlign="center"
               justify="center"
               width={isMobile && "300px"}
+              my={3}
             >
               <AlertIcon size="40px" />
               <AlertDescription fontSize={isMobile ? "10px" : "12px"}>
@@ -170,6 +175,7 @@ const Settings = () => {
               textAlign="center"
               justify="center"
               width={isMobile && "300px"}
+              my={3}
             >
               <AlertIcon size="40px" />
               <AlertDescription fontSize={isMobile ? "10px" : "12px"}>
@@ -184,6 +190,7 @@ const Settings = () => {
               className="glow-on-hover"
               w="300px"
               onClick={saveSettings}
+              isLoading={loading}
             >
               Save
             </Button>

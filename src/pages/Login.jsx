@@ -26,6 +26,7 @@ const Login = () => {
     name: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
   const { login } = useContext(UserContext);
   const { displayToast } = useToastService();
   const isMobile = useBreakpointValue({ base: true, md: false });
@@ -42,6 +43,7 @@ const Login = () => {
     if (!loginData.name || !loginData.password) {
       setFieldError(true);
     } else {
+      setLoading(true);
       try {
         setFieldError(false);
         const response = await userServices.login(loginData);
@@ -50,6 +52,8 @@ const Login = () => {
         displayToast("success", "Welcome back! Get ready to start tapping!");
       } catch (error) {
         setLoginError(true);
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -108,22 +112,40 @@ const Login = () => {
           <TbArrowBadgeRight size="60px" className="arrow-badge" />
         </Flex>
         {fieldError && (
-          <Alert status="error" textAlign="center" justify="center">
+          <Alert
+            status="error"
+            textAlign="center"
+            justify="center"
+            p={5}
+            my={5}
+          >
             <AlertIcon size="50px" />
-            <AlertDescription fontSize={isMobile ? "15px" : "25px"}>
+            <AlertDescription fontSize={isMobile ? "15px" : "20px"}>
               Uh, oh... Please fill in all the fields
             </AlertDescription>
           </Alert>
         )}
         {loginError && (
-          <Alert status="error" textAlign="center" justify="center">
+          <Alert
+            status="error"
+            textAlign="center"
+            justify="center"
+            p={5}
+            my={5}
+          >
             <AlertIcon size="50px" />
-            <AlertDescription fontSize={isMobile ? "15px" : "25px"}>
+            <AlertDescription fontSize={isMobile ? "15px" : "20px"}>
               Uh, oh... Wrong email or password
             </AlertDescription>
           </Alert>
         )}
-        <Button m={3} className="glow-on-hover" w="300px" onClick={handleLogin}>
+        <Button
+          m={3}
+          className="glow-on-hover"
+          w="300px"
+          onClick={handleLogin}
+          isLoading={loading}
+        >
           Login
         </Button>
         <Text fontSize="xs" textAlign="center" mt={3}>
