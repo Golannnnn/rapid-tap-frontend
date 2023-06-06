@@ -1,8 +1,13 @@
 import { useState, useEffect } from "react";
 import Circle from "./Circle";
-import { Flex, Text } from "@chakra-ui/react";
+import { Flex, Text, Button } from "@chakra-ui/react";
 import GoBack from "../components/GoBack";
 import GameOver from "../components/GameOver";
+import useWindowSize from "react-use/lib/useWindowSize";
+import Confetti from "react-confetti";
+import { UserContext } from "../context/UserContext";
+import scoreService from "../services/scores";
+import { useContext } from "react";
 
 const TapMode = () => {
   const [circleDimensions, setCircleDimensions] = useState({
@@ -15,8 +20,11 @@ const TapMode = () => {
     timer: timeLimit,
   });
   const [isGameRunning, setIsGameRunning] = useState(false);
-  const [isGameOver , setIsGameOver] = useState(false)
-  console.log(isGameOver)
+  const [isGameOver, setIsGameOver] = useState(false);
+  const [isSpacebarPressed, setIsSpacebarPressed] = useState(false);
+  const { width, height } = useWindowSize();
+  const [nextRound, setNextRound] = useState(false);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     const calculateDimensions = (round) => {
@@ -47,18 +55,17 @@ const TapMode = () => {
         timer: timeLimit,
       });
       setIsGameRunning(false);
-      setIsGameOver(true)
+      setIsGameOver(true);
       setCircleDimensions({
         outerRadius: 100,
         innerRadius: 50,
       });
-    } else {
-      timer();
     }
   }, [gameProgress.timer, timeLimit, isGameRunning]);
 
   const handleKeyPress = (event) => {
-    if (isGameRunning && event.keyCode === 32) {
+    if (isGameRunning && event.code === "Space" && !isSpacebarPressed) {
+      setIsSpacebarPressed(true);
       // expands the circle by 5px every time space is pressed
       setCircleDimensions((prevDimensions) => {
         const { outerRadius, innerRadius } = prevDimensions;
@@ -70,6 +77,8 @@ const TapMode = () => {
             round: gameProgress.round + 1,
           }));
           setIsGameRunning(false);
+          setNextRound(false);
+          saveScore();
         }
         return { ...prevDimensions, innerRadius: newInnerRadius };
       });
@@ -78,15 +87,17 @@ const TapMode = () => {
 
   useEffect(() => {
     document.addEventListener("keyup", handleKeyPress);
+
     return () => {
       document.removeEventListener("keyup", handleKeyPress);
     };
   }, [isGameRunning]);
 
-  const timer = () => {
-    // if the game is running the timer increases by 1 every second else the timer is reset to 0
+  useEffect(() => {
+    let timerId;
+
     if (isGameRunning) {
-      setTimeout(() => {
+      timerId = setInterval(() => {
         setGameProgress((prevProgress) => ({
           ...prevProgress,
           timer: prevProgress.timer - 1,
@@ -98,23 +109,32 @@ const TapMode = () => {
         timer: timeLimit,
       }));
     }
-  };
+
+    return () => {
+      clearInterval(timerId);
+    };
+  }, [isGameRunning, timeLimit, gameProgress.timer]);
 
   const startGame = () => {
+    setIsSpacebarPressed(false);
     setGameProgress((prevProgress) => ({
       ...prevProgress,
       timer: timeLimit,
     }));
     setIsGameRunning(true);
-    setIsGameOver(false)
+    setIsGameOver(false);
   };
 
   const startNextRound = () => {
-    setGameProgress((prevProgress) => ({
-      ...prevProgress,
-      timer: timeLimit,
-    }));
-    setIsGameRunning(true);
+    setNextRound(true);
+  };
+
+  const saveScore = async () => {
+    const newScore = {
+      score: gameProgress.round,
+    };
+    const response = await scoreService.addScore(user.id, newScore);
+    console.log(response);
   };
 
   return (
@@ -129,30 +149,45 @@ const TapMode = () => {
           mt={180}
           pos="relative"
         >
-          <Circle
-            radius={circleDimensions.outerRadius}
-            backgroundColor="transparent"
-            borderColor="black"
-            startGame={startGame}
-            startNextRound={startNextRound}
-            isGameRunning={isGameRunning}
-            smallCircle={false}
-          />
-          <Circle
-            radius={circleDimensions.innerRadius}
-            backgroundColor="black"
-            borderColor="black"
-            startGame={startGame}
-            startNextRound={startNextRound}
-            isGameRunning={isGameRunning}
-            smallCircle={true}
-          />
+          {!isGameRunning &&
+          !isGameOver &&
+          gameProgress.round > 1 &&
+          !nextRound ? (
+            <Button onClick={startNextRound} colorScheme="blue">
+              Start Round {gameProgress.round}
+            </Button>
+          ) : (
+            <>
+              <Circle
+                radius={circleDimensions.outerRadius}
+                backgroundColor="transparent"
+                borderColor="black"
+                startGame={startGame}
+                isGameRunning={isGameRunning}
+                smallCircle={false}
+              />
+              <Circle
+                radius={circleDimensions.innerRadius}
+                backgroundColor="black"
+                borderColor="black"
+                startGame={startGame}
+                isGameRunning={isGameRunning}
+                smallCircle={true}
+              />
+            </>
+          )}
+          {isGameOver && <GameOver />}
         </Flex>
       </Flex>
-      <Flex align="center" justify="center" mt="200px">
-        <GoBack />
-        {isGameOver && <GameOver />}
-      </Flex>
+      {!isGameRunning && (
+        <Flex align="center" justify="center" mt="200px">
+          <GoBack />
+        </Flex>
+      )}
+      {!isGameRunning &&
+        !isGameOver &&
+        gameProgress.round > 1 &&
+        !nextRound && <Confetti width={width} height={height} />}
     </>
   );
 };
