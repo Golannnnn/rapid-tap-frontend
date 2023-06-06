@@ -5,6 +5,7 @@ import scoreServices from "../services/scores.js";
 import { NavLink } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
+import GoBack from "../components/GoBack";
 
 const HighScorePage = () => {
   const [prevScore, setPrevScore] = useState(null);
@@ -44,11 +45,7 @@ const HighScorePage = () => {
       <Flex direction="column">
         <ScoreTableItems />
         <Flex justify="center" align="center" direction="column">
-          <NavLink to="/">
-            <Button className="glow-on-hover" m={4}>
-              Main Menu
-            </Button>
-          </NavLink>
+          <GoBack/>
         </Flex>
       </Flex>
     </Flex>

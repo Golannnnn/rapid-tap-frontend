@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import ClickCircle from "./ClickCircle";
+import Circle from "./Circle";
 import { Flex, Text, Button } from "@chakra-ui/react";
-import GoBack from "../components/GoBack";
 import GameOver from "../components/GameOver";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
 import { UserContext } from "../context/UserContext";
 import scoreService from "../services/scores";
 import { useContext } from "react";
+import { NavLink } from "react-router-dom";
 
 const TapMode = () => {
   const [circleDimensions, setCircleDimensions] = useState({
@@ -64,38 +64,32 @@ const TapMode = () => {
   }, [gameProgress.timer, timeLimit, isGameRunning]);
 
   const handleKeyPress = (event) => {
-    if (isGameRunning && !isSpacebarPressed) {
-      const { outerRadius, innerRadius } = circleDimensions;
-      const { target } = event;
-      if (
-        target.classList.contains("circle") &&
-        target.offsetWidth / 2 >= innerRadius &&
-        target.offsetWidth / 2 <= outerRadius
-      ) {
-        setIsSpacebarPressed(true);
-        setCircleDimensions((prevDimensions) => {
-          const { outerRadius, innerRadius } = prevDimensions;
-          const newInnerRadius = innerRadius + 5;
-          if (newInnerRadius >= outerRadius) {
-            setGameProgress((prevProgress) => ({
-              ...prevProgress,
-              round: gameProgress.round + 1,
-            }));
-            setIsGameRunning(false);
-            setNextRound(false);
-            saveScore();
-          }
-          return { ...prevDimensions, innerRadius: newInnerRadius };
-        });
-      }
+    if (isGameRunning && event.code === "Space" && !isSpacebarPressed) {
+      setIsSpacebarPressed(true);
+      // expands the circle by 5px every time space is pressed
+      setCircleDimensions((prevDimensions) => {
+        const { outerRadius, innerRadius } = prevDimensions;
+        const newInnerRadius = innerRadius + 5;
+        if (newInnerRadius >= outerRadius) {
+          // if the innerRadius is equal to or greater than the outerRadius the game is over
+          setGameProgress((prevProgress) => ({
+            ...prevProgress,
+            round: gameProgress.round + 1,
+          }));
+          setIsGameRunning(false);
+          setNextRound(false);
+          saveScore();
+        }
+        return { ...prevDimensions, innerRadius: newInnerRadius };
+      });
     }
   };
 
   useEffect(() => {
-    document.addEventListener("click", handleKeyPress);
+    document.addEventListener("keyup", handleKeyPress);
 
     return () => {
-      document.removeEventListener("click", handleKeyPress);
+      document.removeEventListener("keyup", handleKeyPress);
     };
   }, [isGameRunning]);
 
@@ -143,11 +137,22 @@ const TapMode = () => {
     console.log(response);
   };
 
+  const resetGame = () => {
+    setGameProgress({ round: 1, timer: timeLimit });
+    setIsGameRunning(false);
+    setIsGameOver(false);
+    setCircleDimensions({ outerRadius: 100, innerRadius: 50 });
+  };
+
   return (
     <>
       <Flex align="center" justify="center" direction="column" mt={5}>
-        <Text>Round: {gameProgress.round}</Text>
-        <Text>Timer: {gameProgress.timer}</Text>
+        {!isGameOver && (
+          <>
+            <Text>Round: {gameProgress.round}</Text>
+            <Text>Timer: {gameProgress.timer}</Text>
+          </>
+        )}
         <Flex
           align="center"
           justify="center"
@@ -159,34 +164,59 @@ const TapMode = () => {
           !isGameOver &&
           gameProgress.round > 1 &&
           !nextRound ? (
-            <Button onClick={startNextRound} colorScheme="blue">
-              Start Round {gameProgress.round}
-            </Button>
+            <>
+              <Button onClick={startNextRound} colorScheme="blue">
+                Start Round {gameProgress.round}
+              </Button>
+              <NavLink to="/">
+                <Button m={3} className="glow-on-hover" w={"192px"}>
+                  Main Menu
+                </Button>
+              </NavLink>
+            </>
           ) : (
             <>
-              <ClickCircle
-                radius={circleDimensions.outerRadius}
-                backgroundColor="transparent"
-                borderColor="black"
-                startGame={startGame}
-                isGameRunning={isGameRunning}
-                smallCircle={false}
-              />
-              <ClickCircle
-                radius={circleDimensions.innerRadius}
-                backgroundColor="black"
-                borderColor="black"
-                startGame={startGame}
-                isGameRunning={isGameRunning}
-                smallCircle={true}
-              />
+              {!isGameOver && (
+                <>
+                  <Circle
+                    radius={circleDimensions.outerRadius}
+                    backgroundColor="transparent"
+                    borderColor="black"
+                    startGame={startGame}
+                    isGameRunning={isGameRunning}
+                    smallCircle={false}
+                  />
+                  <Circle
+                    radius={circleDimensions.innerRadius}
+                    backgroundColor="black"
+                    borderColor="black"
+                    startGame={startGame}
+                    isGameRunning={isGameRunning}
+                    smallCircle={true}
+                  />
+                </>
+              )}
+            </>
+          )}
+          {isGameOver && (
+            <>
+              <GameOver />
+              <Button m={3} className="glow-on-hover" onClick={resetGame}>
+                Play Again
+              </Button>
+              <NavLink to="/highscores">
+                <Button m={3} className="glow-on-hover">
+                  Highscores
+                </Button>
+              </NavLink>
+              <NavLink to="/">
+                <Button m={3} className="glow-on-hover" w={"192px"}>
+                  Main Menu
+                </Button>
+              </NavLink>
             </>
           )}
         </Flex>
-      </Flex>
-      <Flex align="center" justify="center" mt="200px">
-        <GoBack />
-        {isGameOver && <GameOver />}
       </Flex>
       {!isGameRunning &&
         !isGameOver &&

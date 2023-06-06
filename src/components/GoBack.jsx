@@ -6,7 +6,7 @@ const GoBack = () => {
     <Flex justify="center" align="center" direction="column" mx={4}>
       <NavLink to="/">
         <Button m={3} className="glow-on-hover">
-          Go back
+          Main Menu
         </Button>
       </NavLink>
     </Flex>

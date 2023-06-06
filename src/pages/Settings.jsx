@@ -1,19 +1,5 @@
 import { useState, useContext, useRef } from "react";
-import {
-  Flex,
-  Heading,
-  Text,
-  Button,
-  FormControl,
-  Input,
-  Center,
-  Avatar,
-  AvatarBadge,
-  useBreakpointValue,
-  Alert,
-  AlertIcon,
-  AlertDescription,
-} from "@chakra-ui/react";
+import { Flex, Heading, Text, Button, FormControl, Input, Center, Avatar, AvatarBadge, useBreakpointValue, Alert, AlertIcon, AlertDescription,} from "@chakra-ui/react";
 import { TbArrowBadgeRight } from "react-icons/tb";
 import { UserContext } from "../context/UserContext";
 import { AiFillCamera } from "react-icons/ai";
@@ -36,6 +22,7 @@ const Settings = () => {
   const { displayToast } = useToastService();
   const [fieldError, setFieldError] = useState(false);
   const [loginError, setLoginError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setUserData({
@@ -69,6 +56,7 @@ const Settings = () => {
       return;
     }
 
+    setLoading(true);
     try {
       const response = await userServices.update(user.id, userObject);
       setFieldError(false);
@@ -83,6 +71,8 @@ const Settings = () => {
       updateUser(newUpdatedUser);
     } catch (error) {
       setLoginError(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -98,7 +88,7 @@ const Settings = () => {
             Settings
           </Heading>
           <Text fontSize="xs" align="center">
-            Customize Your Rapid Tap Experience!
+            Customize Your RapidTap Experience!
           </Text>
           <Text fontSize="xs" align="center" mb={isMobile ? 5 : 10}>
             Tapped it? Saved it? Now you can change it!
@@ -139,7 +129,7 @@ const Settings = () => {
           mt={isMobile ? "30px" : "50px"}
         >
           <Flex flexDirection="column">
-            <Text ml={3}>Nickname or email</Text>
+            <Text ml={3}>Username or email</Text>
             <FormControl m={3} className="glow-on-hover" w="300px">
               <Input
                 type="text"
@@ -157,6 +147,7 @@ const Settings = () => {
               textAlign="center"
               justify="center"
               width={isMobile && "300px"}
+              my={3}
             >
               <AlertIcon size="40px" />
               <AlertDescription fontSize={isMobile ? "10px" : "12px"}>
@@ -170,6 +161,7 @@ const Settings = () => {
               textAlign="center"
               justify="center"
               width={isMobile && "300px"}
+              my={3}
             >
               <AlertIcon size="40px" />
               <AlertDescription fontSize={isMobile ? "10px" : "12px"}>
@@ -184,6 +176,7 @@ const Settings = () => {
               className="glow-on-hover"
               w="300px"
               onClick={saveSettings}
+              isLoading={loading}
             >
               Save
             </Button>
