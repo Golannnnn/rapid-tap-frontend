@@ -9,6 +9,7 @@ import scoreService from "../services/scores";
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import levels from "./levels";
+import { ColorContext } from "../context/ColorContext";
 
 const TapMode = () => {
   const [circleDimensions, setCircleDimensions] = useState({
@@ -26,6 +27,7 @@ const TapMode = () => {
   const { width, height } = useWindowSize();
   const [nextRound, setNextRound] = useState(false);
   const { user } = useContext(UserContext);
+  const { color, setColor, avatar, setAvatar } = useContext(ColorContext);
 
   useEffect(() => {
     const calculateDimensions = () => {
@@ -173,18 +175,18 @@ const TapMode = () => {
             <>
               {!isGameOver && (
                 <>
-                  <Circle
+                 <Circle
                     radius={circleDimensions.outerRadius}
                     backgroundColor="transparent"
-                    borderColor="black"
+                    borderColor={color}
                     startGame={startGame}
                     isGameRunning={isGameRunning}
                     smallCircle={false}
                   />
                   <Circle
                     radius={circleDimensions.innerRadius}
-                    backgroundColor="black"
-                    borderColor="black"
+                    backgroundColor={color}
+                    borderColor={color}
                     startGame={startGame}
                     isGameRunning={isGameRunning}
                     smallCircle={true}
