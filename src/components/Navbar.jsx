@@ -10,10 +10,13 @@ import { UserContext } from "../context/UserContext";
 import { NavLink } from "react-router-dom";
 import logo from "../Images/logo.png";
 import BackgroundMusic from "./BackgroundMusic";
+import { SoundContext } from "../context/SoundContext";
+import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 
 const Navbar = () => {
   const { user, logOut } = useContext(UserContext);
   const isMobile = useBreakpointValue({ base: true, md: false });
+  const { sound, toggleSound } = useContext(SoundContext);
 
   return (
     <Flex
@@ -38,6 +41,19 @@ const Navbar = () => {
         )}
       </Flex>
       <Flex align="center" justify="center" gap={5}>
+        {sound ? (
+          <HiSpeakerWave
+            size={isMobile ? "30px" : "40px"}
+            onClick={toggleSound}
+            cursor="pointer"
+          />
+        ) : (
+          <HiSpeakerXMark
+            size={isMobile ? "30px" : "40px"}
+            onClick={toggleSound}
+            cursor="pointer"
+          />
+        )}
         <BackgroundMusic />
         {user ? (
           <Button size={isMobile ? "sm" : "md"} px={5} py={5} onClick={logOut}>

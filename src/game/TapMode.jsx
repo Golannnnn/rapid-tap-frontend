@@ -9,6 +9,7 @@ import scoreService from "../services/scores";
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import levels from "./levels";
+import { SoundContext } from "../context/SoundContext";
 
 const TapMode = () => {
   const [circleDimensions, setCircleDimensions] = useState({
@@ -26,6 +27,7 @@ const TapMode = () => {
   const { width, height } = useWindowSize();
   const [nextRound, setNextRound] = useState(false);
   const { user } = useContext(UserContext);
+  const { succesSound, clickSound, loseSound } = useContext(SoundContext);
 
   useEffect(() => {
     const calculateDimensions = () => {
@@ -50,6 +52,7 @@ const TapMode = () => {
       });
       setIsGameRunning(false);
       setIsGameOver(true);
+      loseSound();
       setCircleDimensions({
         outerRadius: 170,
         innerRadius: 50,
@@ -60,6 +63,7 @@ const TapMode = () => {
   const handleKeyPress = (event) => {
     if (isGameRunning && event.code === "Space" && !isSpacebarPressed) {
       setIsSpacebarPressed(true);
+      clickSound();
       // expands the circle by 5px every time space is pressed
       setCircleDimensions((prevDimensions) => {
         const { outerRadius, innerRadius } = prevDimensions;
@@ -71,6 +75,7 @@ const TapMode = () => {
             ...prevProgress,
             round: gameProgress.round + 1,
           }));
+          succesSound();
           setIsGameRunning(false);
           setNextRound(false);
           saveScore();
