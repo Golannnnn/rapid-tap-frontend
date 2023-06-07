@@ -31,9 +31,11 @@ const Navbar = () => {
             boxSize={isMobile ? "60px" : "75px"}
           />
         </NavLink>
-        <Text ml={2} fontSize={isMobile ? "sm" : "lg"}>
-          {user ? `Welcome ${user.nickname}` : "Welcome Guest"}
-        </Text>
+        {!isMobile && (
+          <Text ml={2} fontSize="lg">
+            {user ? `Welcome ${user.nickname}` : "Welcome Guest"}
+          </Text>
+        )}
       </Flex>
       <Flex align="center" justify="center" gap={5}>
         <BackgroundMusic />

@@ -12,40 +12,34 @@ import levels from "./levels";
 
 const TapMode = () => {
   const [circleDimensions, setCircleDimensions] = useState({
-    outerRadius: 100,
+    outerRadius: 170,
     innerRadius: 50,
   });
   const [gameProgress, setGameProgress] = useState({
     round: 1,
-    timer: levels[0].timelimit,
+    timer: 5,
   });
-  const [timeLimit, setTimeLimit] = useState(levels[0].timelimit);
+  const [timeLimit, setTimeLimit] = useState(5);
   const [isGameRunning, setIsGameRunning] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
   const [isSpacebarPressed, setIsSpacebarPressed] = useState(false);
   const { width, height } = useWindowSize();
   const [nextRound, setNextRound] = useState(false);
+  const [delayButtons, setDelayButtons] = useState(true);
   const { user } = useContext(UserContext);
 
   useEffect(() => {
     const calculateDimensions = () => {
       // outerRadius is increasing by 10 every round and starts at 100
-      const outerRadius = 100;
+      const outerRadius = levels[gameProgress.round - 1].outerCircleRadius;
       // innerRadius is decreasing by 5 every round and starts at 50
-      const innerRadius = 50;
+      const innerRadius = levels[gameProgress.round - 1].innerCircleRadius;
       return { outerRadius, innerRadius };
     };
 
-    const calculateTimeLimit = () => {
-      // decreases by 1 every round and starts at 10
-      return levels[gameProgress.round - 1].timelimit;
-    };
-
     const dimensions = calculateDimensions(gameProgress.round);
-    const limit = calculateTimeLimit();
 
     setCircleDimensions(dimensions);
-    setTimeLimit(limit);
   }, [gameProgress.round]);
 
   useEffect(() => {
@@ -53,14 +47,17 @@ const TapMode = () => {
     if (gameProgress.timer <= 0 && isGameRunning) {
       setGameProgress({
         round: 1,
-        timer: timeLimit,
+        timer: 5,
       });
       setIsGameRunning(false);
       setIsGameOver(true);
       setCircleDimensions({
-        outerRadius: 100,
+        outerRadius: 170,
         innerRadius: 50,
       });
+      setTimeout(() => {
+        setDelayButtons(false);
+      }, 1000);
     }
   }, [gameProgress.timer, timeLimit, isGameRunning]);
 
@@ -77,7 +74,7 @@ const TapMode = () => {
         setCircleDimensions((prevDimensions) => {
           const { outerRadius, innerRadius } = prevDimensions;
           const newInnerRadius =
-            innerRadius + levels[gameProgress.round - 1].sizeincrease;
+            innerRadius + levels[gameProgress.round - 1].circleSizeIncrease;
           if (newInnerRadius >= outerRadius) {
             setGameProgress((prevProgress) => ({
               ...prevProgress,
@@ -86,6 +83,9 @@ const TapMode = () => {
             setIsGameRunning(false);
             setNextRound(false);
             saveScore();
+            setTimeout(() => {
+              setDelayButtons(false);
+            }, 500);
           }
           return { ...prevDimensions, innerRadius: newInnerRadius };
         });
@@ -94,10 +94,10 @@ const TapMode = () => {
   };
 
   useEffect(() => {
-    document.addEventListener("click", handleKeyPress);
+    document.addEventListener("touchend", handleKeyPress);
 
     return () => {
-      document.removeEventListener("click", handleKeyPress);
+      document.removeEventListener("touchend", handleKeyPress);
     };
   }, [isGameRunning]);
 
@@ -131,10 +131,12 @@ const TapMode = () => {
     }));
     setIsGameRunning(true);
     setIsGameOver(false);
+    setDelayButtons(true);
   };
 
   const startNextRound = () => {
     setNextRound(true);
+    setDelayButtons(true);
   };
 
   const saveScore = async () => {
@@ -148,17 +150,18 @@ const TapMode = () => {
     setGameProgress({ round: 1, timer: timeLimit });
     setIsGameRunning(false);
     setIsGameOver(false);
-    setCircleDimensions({ outerRadius: 100, innerRadius: 50 });
+    setCircleDimensions({ outerRadius: 170, innerRadius: 50 });
+    setDelayButtons(true);
   };
 
   return (
     <>
-      <Flex align="center" justify="center" direction="column" mt={5}>
+      <Flex align="center" justify="center" direction="column" mt={3}>
         {!isGameOver && (
-          <>
-            <Text>Round: {gameProgress.round}</Text>
-            <Text>Timer: {gameProgress.timer}</Text>
-          </>
+          <Flex w="100%" justify="space-between" px={10} mb={5}>
+            <Text mr={10}>Round:{gameProgress.round}</Text>
+            <Text>Timer:{gameProgress.timer}</Text>
+          </Flex>
         )}
         <Flex
           align="center"
@@ -171,16 +174,20 @@ const TapMode = () => {
           !isGameOver &&
           gameProgress.round > 1 &&
           !nextRound ? (
-            <>
-              <Button onClick={startNextRound} colorScheme="blue">
-                Start Round {gameProgress.round}
-              </Button>
-              <NavLink to="/">
-                <Button m={3} className="glow-on-hover" w={"192px"}>
-                  Main Menu
-                </Button>
-              </NavLink>
-            </>
+            <Flex align="center" justify="center" direction="column" mt={180}>
+              {!delayButtons && (
+                <>
+                  <Button onClick={startNextRound} colorScheme="blue">
+                    Start Round {gameProgress.round}
+                  </Button>
+                  <NavLink to="/">
+                    <Button m={3} className="glow-on-hover" w={"192px"}>
+                      Main Menu
+                    </Button>
+                  </NavLink>
+                </>
+              )}
+            </Flex>
           ) : (
             <>
               {!isGameOver && (
@@ -192,6 +199,7 @@ const TapMode = () => {
                     startGame={startGame}
                     isGameRunning={isGameRunning}
                     smallCircle={false}
+                    round={gameProgress.round}
                   />
                   <ClickCircle
                     radius={circleDimensions.innerRadius}
@@ -200,6 +208,7 @@ const TapMode = () => {
                     startGame={startGame}
                     isGameRunning={isGameRunning}
                     smallCircle={true}
+                    round={gameProgress.round}
                   />
                 </>
               )}
@@ -208,19 +217,23 @@ const TapMode = () => {
           {isGameOver && (
             <>
               <GameOver />
-              <Button m={3} className="glow-on-hover" onClick={resetGame}>
-                Play Again
-              </Button>
-              <NavLink to="/highscores">
-                <Button m={3} className="glow-on-hover">
-                  Highscores
-                </Button>
-              </NavLink>
-              <NavLink to="/">
-                <Button m={3} className="glow-on-hover" w={"192px"}>
-                  Main Menu
-                </Button>
-              </NavLink>
+              {!delayButtons && (
+                <>
+                  <Button m={3} className="glow-on-hover" onClick={resetGame}>
+                    Play Again
+                  </Button>
+                  <NavLink to="/highscores">
+                    <Button m={3} className="glow-on-hover">
+                      Highscores
+                    </Button>
+                  </NavLink>
+                  <NavLink to="/">
+                    <Button m={3} className="glow-on-hover" w={"192px"}>
+                      Main Menu
+                    </Button>
+                  </NavLink>
+                </>
+              )}
             </>
           )}
         </Flex>

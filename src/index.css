@@ -1,3 +1,27 @@
+.x {
+  animation: x 5s linear infinite alternate;
+}
+
+.y {
+  background-color: #000;
+  animation: y 1s linear infinite alternate;
+}
+
+@keyframes x {
+  0% {
+    transform: translateX(calc(100dvw - 100px));
+  }
+  100% {
+    transform: translateY(calc(100dvh - 100px));
+  }
+}
+
+@keyframes y {
+  100% {
+    transform: translateY(calc(100dvh - 100px));
+  }
+}
+
 /* Glow */
 .glow-on-hover {
   border: none;
