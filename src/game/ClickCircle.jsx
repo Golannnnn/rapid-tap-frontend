@@ -7,6 +7,7 @@ const Circle = ({
   borderColor,
   startGame,
   isGameRunning,
+  round,
 }) => {
   const [countDown, setCountDown] = useState(3);
   const [canClick, setCanClick] = useState(true);
@@ -27,9 +28,9 @@ const Circle = ({
   };
 
   useEffect(() => {
-    document.addEventListener("click", handleKeyDown);
+    document.addEventListener("touchend", handleKeyDown);
     return () => {
-      document.removeEventListener("click", handleKeyDown);
+      document.removeEventListener("touchend", handleKeyDown);
     };
   }, [handleKeyDown]);
 
@@ -45,7 +46,7 @@ const Circle = ({
       if (!isGameRunning) {
         startGame();
       }
-    }, 4000);
+    }, 3000);
   };
 
   const circleStyle = {
@@ -60,14 +61,33 @@ const Circle = ({
     alignItems: "center",
     color: "white",
     cursor: isGameRunning ? "default" : "pointer",
+    animation: isGameRunning
+      ? `${Math.round(3 - round * 0.2)}s linear 0s infinite alternate slidein`
+      : "",
   };
 
+  const keyframe = `
+    @keyframes slidein {
+      0% {
+        transform: translateY(-50px);
+      }
+      100% {
+        transform: translateY(calc(
+          50dvh - 50px
+        ));
+      }
+    }
+  `;
+
   return (
-    <div style={circleStyle} onClick={handleClick} className="circle">
-      {!isGameRunning && canClick && "Tap"}
-      {!isGameRunning && !canClick && countDown > 0 && countDown}
-      {!isGameRunning && countDown === 0 && "Go!"}
-    </div>
+    <>
+      <style>{keyframe}</style>
+      <div style={circleStyle} onClick={handleClick} className="circle">
+        {!isGameRunning && canClick && "Tap"}
+        {!isGameRunning && !canClick && countDown > 0 && countDown}
+        {/* {!isGameRunning && countDown === 0 && "Go!"} */}
+      </div>
+    </>
   );
 };
 

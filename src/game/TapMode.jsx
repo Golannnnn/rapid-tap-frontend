@@ -12,14 +12,14 @@ import levels from "./levels";
 
 const TapMode = () => {
   const [circleDimensions, setCircleDimensions] = useState({
-    outerRadius: 100,
+    outerRadius: 170,
     innerRadius: 50,
   });
   const [gameProgress, setGameProgress] = useState({
     round: 1,
-    timer: levels[0].timelimit,
+    timer: 5,
   });
-  const [timeLimit, setTimeLimit] = useState(levels[0].timelimit);
+  const [timeLimit, setTimeLimit] = useState(5);
   const [isGameRunning, setIsGameRunning] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
   const [isSpacebarPressed, setIsSpacebarPressed] = useState(false);
@@ -30,22 +30,15 @@ const TapMode = () => {
   useEffect(() => {
     const calculateDimensions = () => {
       // outerRadius is increasing by 10 every round and starts at 100
-      const outerRadius = 100;
+      const outerRadius = levels[gameProgress.round - 1].outerCircleRadius;
       // innerRadius is decreasing by 5 every round and starts at 50
-      const innerRadius = 50;
+      const innerRadius = levels[gameProgress.round - 1].innerCircleRadius;
       return { outerRadius, innerRadius };
     };
 
-    const calculateTimeLimit = () => {
-      // decreases by 1 every round and starts at 10
-      return levels[gameProgress.round - 1].timelimit;
-    };
-
     const dimensions = calculateDimensions(gameProgress.round);
-    const limit = calculateTimeLimit();
 
     setCircleDimensions(dimensions);
-    setTimeLimit(limit);
   }, [gameProgress.round]);
 
   useEffect(() => {
@@ -53,12 +46,12 @@ const TapMode = () => {
     if (gameProgress.timer <= 0 && isGameRunning) {
       setGameProgress({
         round: 1,
-        timer: timeLimit,
+        timer: 5,
       });
       setIsGameRunning(false);
       setIsGameOver(true);
       setCircleDimensions({
-        outerRadius: 100,
+        outerRadius: 170,
         innerRadius: 50,
       });
     }
@@ -71,7 +64,7 @@ const TapMode = () => {
       setCircleDimensions((prevDimensions) => {
         const { outerRadius, innerRadius } = prevDimensions;
         const newInnerRadius =
-          innerRadius + levels[gameProgress.round - 1].sizeincrease;
+          innerRadius + levels[gameProgress.round - 1].circleSizeIncrease;
         if (newInnerRadius >= outerRadius) {
           // if the innerRadius is equal to or greater than the outerRadius the game is over
           setGameProgress((prevProgress) => ({
@@ -142,7 +135,7 @@ const TapMode = () => {
     setGameProgress({ round: 1, timer: timeLimit });
     setIsGameRunning(false);
     setIsGameOver(false);
-    setCircleDimensions({ outerRadius: 100, innerRadius: 50 });
+    setCircleDimensions({ outerRadius: 170, innerRadius: 50 });
   };
 
   return (
@@ -158,7 +151,7 @@ const TapMode = () => {
           align="center"
           justify="center"
           direction="column"
-          mt={180}
+          mt={220}
           pos="relative"
         >
           {!isGameRunning &&
@@ -166,6 +159,7 @@ const TapMode = () => {
           gameProgress.round > 1 &&
           !nextRound ? (
             <>
+              {/** delay the show of button for 1 second */}
               <Button onClick={startNextRound} colorScheme="blue">
                 Start Round {gameProgress.round}
               </Button>

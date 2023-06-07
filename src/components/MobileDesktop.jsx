@@ -17,14 +17,14 @@ const MobileDesktop = () => {
       <Text textAlign="center" fontSize="2xl" fontWeight="bold" mt={20} mb={5}>
         Choose your device:
       </Text>
-      <NavLink to="/tapmode">
-        <Box style={circleStyle} mt={10} mb={10} className="glow-on-hover">
-          <Text align="center">Desktop</Text>
-        </Box>
-      </NavLink>
       <NavLink to="/clickmode">
         <Box style={circleStyle} className="glow-on-hover">
           <Text align="center">Mobile</Text>
+        </Box>
+      </NavLink>
+      <NavLink to="/tapmode">
+        <Box style={circleStyle} mt={10} mb={10} className="glow-on-hover">
+          <Text align="center">Desktop</Text>
         </Box>
       </NavLink>
     </Flex>
