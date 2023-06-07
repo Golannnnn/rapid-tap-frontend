@@ -8,6 +8,7 @@ import UserRoute from "./UserRoute";
 import GuestRoute from "./GuestRoute";
 import Settings from "../pages/Settings";
 import ClickMode from "../game/ClickMode";
+import Customize from "../pages/Customize";
 
 // Routes that are for users need to be wrapped in UserRoute
 
@@ -60,6 +61,14 @@ const RoutesTree = () => {
         element={
           <UserRoute>
             <Settings />
+          </UserRoute>
+        }
+      />
+      <Route
+        path="/customize"
+        element={
+          <UserRoute>
+            <Customize />
           </UserRoute>
         }
       />

@@ -38,6 +38,18 @@ const HomePageOut = () => {
           </Button>
           <TbArrowBadgeRight size="60px" className="arrow-badge" />
         </Flex>
+        {user && (
+          <Flex position="relative">
+          <Button m={3} className="glow-on-hover" w="300px"
+            onClick={() => {
+              navigate("/customize");
+            }}
+          >
+            Customize
+          </Button>
+          <TbArrowBadgeRight size="60px" className="arrow-badge" />
+        </Flex>  
+        )}
         {!user && ( 
         <Flex position="relative">
           <Button
