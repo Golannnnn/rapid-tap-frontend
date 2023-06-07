@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { SoundContext } from "../context/SoundContext";
 
 const Circle = ({
   radius,
@@ -11,6 +12,7 @@ const Circle = ({
 }) => {
   const [countDown, setCountDown] = useState(3);
   const [canClick, setCanClick] = useState(true);
+  const { countdownSound } = useContext(SoundContext);
 
   const handleClick = () => {
     if (!isGameRunning && countDown === 3 && canClick) {
@@ -38,6 +40,8 @@ const Circle = ({
     let timerId = setInterval(() => {
       setCountDown((prevCountDown) => prevCountDown - 1);
     }, 1000);
+
+    countdownSound();
 
     setTimeout(() => {
       clearInterval(timerId);

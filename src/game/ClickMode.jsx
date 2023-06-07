@@ -9,6 +9,7 @@ import scoreService from "../services/scores";
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import levels from "./levels";
+import { SoundContext } from "../context/SoundContext";
 
 const TapMode = () => {
   const [circleDimensions, setCircleDimensions] = useState({
@@ -27,6 +28,7 @@ const TapMode = () => {
   const [nextRound, setNextRound] = useState(false);
   const [delayButtons, setDelayButtons] = useState(true);
   const { user } = useContext(UserContext);
+  const { succesSound, clickSound, loseSound } = useContext(SoundContext);
 
   useEffect(() => {
     const calculateDimensions = () => {
@@ -49,6 +51,7 @@ const TapMode = () => {
         round: 1,
         timer: 5,
       });
+      loseSound();
       setIsGameRunning(false);
       setIsGameOver(true);
       setCircleDimensions({
@@ -80,6 +83,7 @@ const TapMode = () => {
               ...prevProgress,
               round: gameProgress.round + 1,
             }));
+            succesSound();
             setIsGameRunning(false);
             setNextRound(false);
             saveScore();
