@@ -1,14 +1,27 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useState } from 'react';
-import { Flex, Heading, Text, Box, Avatar } from '@chakra-ui/react';
+import { Flex, Heading, Text, Box, Avatar, Button } from '@chakra-ui/react';
+import { ColorContext } from '../context/ColorContext';
+import GoBack from '../components/GoBack';
+import useToastService from "../hooks/useToastService";
 
 const Customize = () => {
-  const [color, setColor] = useState('black');
+  const { displayToast } = useToastService();
+  const { color, setColor, avatar, isAvatarClicked, setIsAvatarClicked } = useContext(ColorContext);
+  const [chosenColor, setChosenColor] = useState(color);
+
+  const saveColor = () => {
+    const updatedColor = isAvatarClicked ? avatar : chosenColor;
+    setColor(updatedColor);
+  
+    displayToast("success", "Get tapping with your new color!");
+  };
+  
   const outerCircleStyle = {
     width: '300px',
     height: '300px',
     borderRadius: '50%',
-    border: `2px solid ${color}`,
+    border: `2px solid ${isAvatarClicked ? 'black' : chosenColor}`,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -17,11 +30,15 @@ const Customize = () => {
     width: '100px',
     height: '100px',
     borderRadius: '50%',
-    backgroundColor: color,
+    backgroundColor: chosenColor,
+    backgroundImage: isAvatarClicked ? `url(${avatar})` : 'none',
+    backgroundSize: isAvatarClicked ? 'contain' : 'cover',
+    backgroundPosition: 'center',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
   };
+  
   const circleStyle = {
     width: '100px',
     height: '100px',
@@ -45,30 +62,36 @@ const Customize = () => {
         own avatar!
       </Text>
       <Flex direction="row" align="center" justify="space-around" mt="100px">
-        <Box style={outerCircleStyle}>
-          <Box style={innerCircleStyle}></Box>
-        </Box>
+        <Flex direction="column" align="center">
+          <Box style={outerCircleStyle}>
+            <Box style={innerCircleStyle}></Box>
+          </Box>
+          <Button className='glow-on-hover' onClick={() => saveColor()} mt={6}>
+            Save!
+          </Button>
+        </Flex>
         <Flex direction="column" ml="30px">
           <Flex direction="row" wrap="wrap" justify="center">
-            <Box m="10px" style={circleStyle} bg={'black'} onClick={() => setColor('black')}></Box>
-            <Box m="10px" style={circleStyle} bg={'red'} onClick={() => setColor('red')}></Box>
-            <Box m="10px" style={circleStyle} bg={'orange'} onClick={() => setColor('orange')}></Box>
+            <Box m="10px" style={circleStyle} bg={'black'} onClick={() => {setChosenColor('black'); setIsAvatarClicked(false)}}></Box>
+            <Box m="10px" style={circleStyle} bg={'#FF4848'} onClick={() => {setChosenColor('#FF4848'); setIsAvatarClicked(false)}}></Box>
+            <Box m="10px" style={circleStyle} bg={'#FF9551'} onClick={() => {setChosenColor('#FF9551'); setIsAvatarClicked(false)}}></Box>
           </Flex>
           <Flex direction="row" wrap="wrap" justify="center">
-            <Box m="10px" style={circleStyle} bg={'yellow'} onClick={() => setColor('yellow')}></Box>
-            <Box m="10px" style={circleStyle} bg={'green'} onClick={() => setColor('green')}></Box>
-            <Box m="10px" style={circleStyle} bg={'blue'} onClick={() => setColor('blue')}></Box>
+            <Box m="10px" style={circleStyle} bg={'#FFD966'} onClick={() => {setChosenColor('#FFD966'); setIsAvatarClicked(false)}}></Box>
+            <Box m="10px" style={circleStyle} bg={'#9CFF2E'} onClick={() => {setChosenColor('#9CFF2E'); setIsAvatarClicked(false)}}></Box>
+            <Box m="10px" style={circleStyle} bg={'#31E1F7'} onClick={() => {setChosenColor('#31E1F7'); setIsAvatarClicked(false)}}></Box>
           </Flex>
           <Flex direction="row" wrap="wrap" justify="center">
-            <Box m="10px" style={circleStyle} bg={'purple'} onClick={() => setColor('purple')}></Box>
-            <Box m="10px" style={circleStyle} bg={'pink'} onClick={() => setColor('pink')}></Box>
-            <Box m="10px" style={circleStyle} bg={'brown'} onClick={() => setColor('brown')}></Box>
+            <Box m="10px" style={circleStyle} bg={'#9336B4'} onClick={() => {setChosenColor('#9336B4'); setIsAvatarClicked(false)}}></Box>
+            <Box m="10px" style={circleStyle} bg={'#FF55BB'} onClick={() => {setChosenColor('#FF55BB'); setIsAvatarClicked(false)}}></Box>
+            <Box m="10px" style={circleStyle} bg={'#AA5656'} onClick={() => {setChosenColor('#AA5656'); setIsAvatarClicked(false)}}></Box>
           </Flex>
           <Flex direction="row" wrap="wrap" justify="center">
-            <Avatar m='10px' style={circleStyle} onClick={() => setColor('brown')}></Avatar>
+            <Avatar m='10px' style={circleStyle} src={avatar} onClick={() => {setIsAvatarClicked(true);setChosenColor(avatar);}}></Avatar>
           </Flex>
         </Flex>
       </Flex>
+      <GoBack />
     </Flex>
   );
 };
