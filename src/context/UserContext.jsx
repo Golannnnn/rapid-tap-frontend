@@ -61,11 +61,7 @@ const UserContextProvider = ({ children }) => {
     updateUser,
   };
 
-  return (
-    <UserContext.Provider value={values}>
-      {!loading && children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={values}>{children}</UserContext.Provider>;
 };
 
 export { UserContext, UserContextProvider };
