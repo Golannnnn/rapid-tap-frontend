@@ -10,6 +10,7 @@ import Settings from "../pages/Settings";
 import ClickMode from "../game/ClickMode";
 import MobileDesktop from "../components/MobileDesktop";
 import Customize from "../pages/Customize";
+import Instructions from "../components/Instructions";
 
 // Routes that are for users need to be wrapped in UserRoute
 
@@ -17,6 +18,7 @@ const RoutesTree = () => {
   return (
     <Routes>
       <Route path="/" element={<HomePageOut />} />
+      <Route path="/instructions" element={<Instructions />} />
       <Route
         path="/platform"
         element={

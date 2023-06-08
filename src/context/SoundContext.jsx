@@ -52,6 +52,7 @@ const SoundContextProvider = ({ children }) => {
   const countdownSound = () => {
     const audio = new Audio(countdown);
     audio.loop = false;
+    audio.volume = 0.3;
     if (sound) {
       audio.play();
     } else {
