@@ -10,6 +10,7 @@ import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import levels from "./levels";
 import { SoundContext } from "../context/SoundContext";
+import { ColorContext } from "../context/ColorContext";
 
 const TapMode = () => {
   const [circleDimensions, setCircleDimensions] = useState({
@@ -29,6 +30,7 @@ const TapMode = () => {
   const [delayButtons, setDelayButtons] = useState(true);
   const { user } = useContext(UserContext);
   const { succesSound, clickSound, loseSound } = useContext(SoundContext);
+  const { color } = useContext(ColorContext);
 
   useEffect(() => {
     const calculateDimensions = () => {
@@ -199,7 +201,7 @@ const TapMode = () => {
                   <ClickCircle
                     radius={circleDimensions.outerRadius}
                     backgroundColor="transparent"
-                    borderColor="black"
+                    borderColor={color}
                     startGame={startGame}
                     isGameRunning={isGameRunning}
                     smallCircle={false}
@@ -207,8 +209,8 @@ const TapMode = () => {
                   />
                   <ClickCircle
                     radius={circleDimensions.innerRadius}
-                    backgroundColor="black"
-                    borderColor="black"
+                    backgroundColor={color}
+                    borderColor={color}
                     startGame={startGame}
                     isGameRunning={isGameRunning}
                     smallCircle={true}
