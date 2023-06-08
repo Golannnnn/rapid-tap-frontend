@@ -1,31 +1,19 @@
 import { useState, useContext, useRef } from "react";
-import {
-  Flex,
-  Heading,
-  Text,
-  Button,
-  FormControl,
-  Input,
-  Center,
-  Avatar,
-  AvatarBadge,
-  useBreakpointValue,
-  Alert,
-  AlertIcon,
-  AlertDescription,
-} from "@chakra-ui/react";
+import { Flex, Heading, Text, Button, FormControl, Input, Center, Avatar, AvatarBadge, useBreakpointValue, Alert, AlertIcon, AlertDescription,} from "@chakra-ui/react";
 import { TbArrowBadgeRight } from "react-icons/tb";
 import { UserContext } from "../context/UserContext";
 import { AiFillCamera } from "react-icons/ai";
 import userServices from "../services/users";
 import useToastService from "../hooks/useToastService";
 import GoBack from "../components/GoBack";
+import { ColorContext } from "../context/ColorContext";
 
 //TODO: CHANGE TO MOBILE
 //TODO: ADD TOASTS FOR EVERYTHING
 
 const Settings = () => {
   const isMobile = useBreakpointValue({ base: true, md: false });
+  const { avatar, setAvatar } = useContext(ColorContext);
   const { user, updateUser } = useContext(UserContext);
   const [userData, setUserData] = useState({
     nickname: "",
@@ -52,6 +40,7 @@ const Settings = () => {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     setPicture(file);
+    setAvatar(URL.createObjectURL(file));
   };
 
   const saveSettings = async (e) => {
