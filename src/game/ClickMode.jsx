@@ -47,11 +47,11 @@ const TapMode = () => {
   useEffect(() => {
     // if the timer reaches the time limit it stops the game else the timer continues
     if (gameProgress.timer <= 0 && isGameRunning) {
+      loseSound();
       setGameProgress({
         round: 1,
         timer: 5,
       });
-      loseSound();
       setIsGameRunning(false);
       setIsGameOver(true);
       setCircleDimensions({

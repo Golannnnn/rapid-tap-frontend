@@ -37,11 +37,11 @@ const Circle = ({
   }, [handleKeyDown]);
 
   const startCountdown = () => {
+    countdownSound();
+
     let timerId = setInterval(() => {
       setCountDown((prevCountDown) => prevCountDown - 1);
     }, 1000);
-
-    countdownSound();
 
     setTimeout(() => {
       clearInterval(timerId);
