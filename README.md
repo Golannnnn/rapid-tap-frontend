@@ -2,11 +2,11 @@
 
 A fun tapping game built with React on the frontend, NodeJS on the backend and MongoDB as a database.
 
-This project was built together with my good and talented friends: [Or Ayash](https://github.com/Ayashor) and [Diego Pilosof](https://github.com/diegopilosof). Together we had around a week and a half to build this project as part of the curriculum of ITC. The backend for this project can be found [here](https://github.com/Golannnnn/pet-adoption-be).
+This project was built together with my good and talented friends: [Or Ayash](https://github.com/Ayashor) and [Diego Pilosof](https://github.com/diegopilosof). Together we had around a week and a half to build this project as part of the curriculum of ITC. The backend for this project can be found [here](https://github.com/Golannnnn/rapid-tap-backend).
 
 ## Live Preview
 
-You can check out the live preview [here](https://fs-pet-adoption-fe-golannnnn.vercel.app/).
+You can check out the live preview [here](https://rapid-tap-frontend-golannnnn.vercel.app/).
 
 ## Functionalities
 
